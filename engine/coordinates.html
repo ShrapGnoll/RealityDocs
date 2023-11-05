@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>BF2 Coordinates &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="BF2 Engine Internals" href="internals.html" />
+    <link rel="prev" title="Battlefield Engine" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="bf2-coordinates">
+<h1>BF2 Coordinates<a class="headerlink" href="#bf2-coordinates" title="Permalink to this headline">¶</a></h1>
+<p>Battlefield 2 uses basic a basic 3-dimensional coordinate system to specify the position and orientation of objects within the game world.</p>
+<p>Note that only objects of the <a class="reference internal" href="../python/reference/objects.html#physicalobject"><span class="std std-ref">PhysicalObject</span></a> class and classes that inherit from it (<a class="reference internal" href="../python/reference/objects.html#soldierobject"><span class="std std-ref">SoldierObject</span></a>, <a class="reference internal" href="../python/reference/objects.html#controlpointobject"><span class="std std-ref">ControlPointObject</span></a>, and so on) that “exist” in the game world and posssess positons and orientations. So, for example, instances of <a class="reference internal" href="../python/reference/bf2.html#bf2-playermanager-player"><span class="std std-ref">bf2.PlayerManager.Player</span></a> do <strong>not</strong> have positions or orientations.</p>
+<p>So, to retrieve position and orientation for a vehicle (say, an Abrams tank), representated by the <a class="reference internal" href="../python/reference/objects.html#vehicleobject"><span class="std std-ref">VehicleObject</span></a> <code class="docutils literal notranslate"><span class="pre">tank</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">position</span> <span class="o">=</span> <span class="n">tank</span><span class="o">.</span><span class="n">getPosition</span><span class="p">()</span>
+<span class="n">rotation</span> <span class="o">=</span> <span class="n">tank</span><span class="o">.</span><span class="n">getRotation</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>On the other hand, to get the position and orientation of a player, representated by the <a class="reference internal" href="../python/reference/bf2.html#bf2-playermanager-player"><span class="std std-ref">bf2.PlayerManager.Player</span></a> object <code class="docutils literal notranslate"><span class="pre">andreas</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the SoldierObject containing andreas</span>
+<span class="n">andreasSoldier</span> <span class="o">=</span> <span class="n">andreas</span><span class="o">.</span><span class="n">getVehicle</span><span class="p">()</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">andreasSoldier</span><span class="o">.</span><span class="n">getPosition</span><span class="p">()</span>
+<span class="n">rotation</span> <span class="o">=</span> <span class="n">andreasSoldier</span><span class="o">.</span><span class="n">getRotation</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="position">
+<h2>Position<a class="headerlink" href="#position" title="Permalink to this headline">¶</a></h2>
+<p>Coordinates are specified by a three-element tuple, <code class="docutils literal notranslate"><span class="pre">(X,</span> <span class="pre">Y,</span> <span class="pre">Z)</span></code>. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">160.95599365234375</span><span class="p">,</span> <span class="mf">162.54800415039062</span><span class="p">,</span> <span class="o">-</span><span class="mf">266.01699829101562</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Within <code class="docutils literal notranslate"><span class="pre">.con</span></code> files these coordinates are written with slashes: <code class="docutils literal notranslate"><span class="pre">X/Y/Z</span></code>.</p>
+<p>These coordinates spell out a position along three axes:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">X</span></code> value tells how far east or west an object is; moving further east causes <code class="docutils literal notranslate"><span class="pre">X</span></code> to increase, moving further west causes it to decrease.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Y</span></code> value tells your altitude; as you go higher, <code class="docutils literal notranslate"><span class="pre">Y</span></code> increases.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Z</span></code> value tells how far north or south an object is; moving further north causes <code class="docutils literal notranslate"><span class="pre">Z</span></code> to increase, moving further south causes it to decrease.</p></li>
+</ul>
+<p>In all BF2 maps, the origin of the coordinate system (0, 0) is at the point in the very center of the map. Each unit in the coordinate system equals approximately 1 meter in the game world. Therefore, the example coordinate listed above will be a point 160.96 meters east and 266.02 meters south of map center, at an altitude of 162.55 meters. Note, however, that this is an “absolute” altitude; the altitude relative to the ground will depend on how high the surface of the ground is at that point; “sea level” varies quite a bit from map to map.</p>
+<p>There are two sizes of map included with the basic Battlefield 2 game; the size of map may be determined by using the <code class="docutils literal notranslate"><span class="pre">bf2.gameLogic.getWorldSize()</span></code> method. This method returns a two-element tuple that gives the number of meters E/W and N/S along the edges of the map. All maps except Strike at Karkand return (2048, 2048), indicating the maps cover 4 square kilometers (2048x2048 meters), with coordinates running from -1024 to +1024 along each dimension. Strike at Karkand is the only map of a different size, and returns (1024, 1024), indicating a map covering 1 square kilometer, with coordinates running from -512 to +512 along each dimension.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">bf2.gameLogic.getWorldSize()</span></code> appears to get it’s information from the <code class="docutils literal notranslate"><span class="pre">heightmapcluster.setHeightmapSize</span></code> parameter in the file <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2/mods/bf2/Levels/&lt;name</span> <span class="pre">of</span> <span class="pre">map&gt;/server.zip/Heightdata.con</span></code>.</p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">The distance between any two points can easily be found by using the Pythagorean Theorem</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="kn">import</span> <span class="nn">math</span>
+
+   <span class="k">def</span> <span class="nf">findDistance</span><span class="p">(</span><span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">):</span>
+      <span class="sd">&#39;&#39;&#39;Use Pythagorean Theorem to find distance between two sets of coordinates.</span>
+<span class="sd">      With normal BF2 scaling, the resulting distance will be in meters.&#39;&#39;&#39;</span>
+      <span class="n">deltaX</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">point2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+      <span class="n">deltaY</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">point2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">deltaZ</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">point2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+      <span class="n">distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">deltaX</span> <span class="o">*</span> <span class="n">deltaX</span> <span class="o">+</span>
+                           <span class="n">deltaY</span> <span class="o">*</span> <span class="n">deltaY</span> <span class="o">+</span>
+                           <span class="n">deltaZ</span> <span class="o">*</span> <span class="n">deltaZ</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="n">distance</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="rotation">
+<h2>Rotation<a class="headerlink" href="#rotation" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Rotational orientation (attitude) is specified by another three-element tuple, (A, P, R)</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">166.29025268554687</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Within .con files, these angles are written with slashes: <code class="docutils literal notranslate"><span class="pre">A/P/R</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">A</span></code> (“azimuth”, also known as “yaw”) gives rotation from due north going clockwise (if A is positive) or counter-clockwise (if A is negative), (or, the amount our viewpoint is rotated around a vertical axis passing through our viewpoint) measured in degrees:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">A=0</span></code> (due north)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">A=90</span></code> (due east)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">A=180</span></code> (due south)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">A=270</span></code> (due west)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">P</span></code> (“pitch”) tells how much we’re tilting down compared to horizontal, (or, the amount tilted up or down along the axis passing through our viewpoint from left to right) measured in degrees:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">P=0</span></code> (horizontal)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">P=45</span></code> (tilting down halfway between horizontal and vertical)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">P=90</span></code> (looking straight down)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">P=-45</span></code> (tilting up halfway between horizonal and vertical)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">P=-90</span></code> (looking straight up)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span></code> (“roll”) gives the amount the viewpoint has rolled around an axis passing from the back of our viewpoint through the front of the viewpoint, measured in degrees:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">R=0</span></code> (no roll)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">R=45</span></code> (viewpoint is rolled counter-clockwise by 45 degrees)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">R=-45</span></code> (viewpoint is rolled clockwise by 45 degrees)</p></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="note">
+<h3>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h3>
+<p>Note: The pitch and roll rotational coordinates apply to aircraft and cameras in BF2, but do <strong>not</strong> apply to players or vehicles on the ground. Ground players and vehicles <strong>always</strong> show <code class="docutils literal notranslate"><span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">R</span></code> to be 0, regardless of their actual attitude (a soldier looking straight up in the air will still have a <code class="docutils literal notranslate"><span class="pre">P</span></code> value of 0, for example).</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Battlefield Engine</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">BF2 Coordinates</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#position">Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rotation">Rotation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#note">Note</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html">BF2 Engine Internals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time in BF2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">Battlefield Python</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Battlefield Engine</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Battlefield Engine</a></li>
+      <li>Next: <a href="internals.html" title="next chapter">BF2 Engine Internals</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/engine/coordinates.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Time in BF2 &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Modding" href="../modding/index.html" />
+    <link rel="prev" title="BF2 Engine Internals" href="internals.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="time-in-bf2">
+<h1>Time in BF2<a class="headerlink" href="#time-in-bf2" title="Permalink to this headline">¶</a></h1>
+<p>Time is principly measured within Battlefield 2 by means of “wall time”–the time in high-resolution seconds since the server started running (e.g. <code class="docutils literal notranslate"><span class="pre">443.451488108</span></code>). Note that since the BF2 server does not restart between rounds (unlike the servers for <em>Battlefield: 1942</em> and <em>Battlefield: Vietnam</em>, which both practially reboot between rounds), wall time continues to increase from round to round.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">The current wall time can be determined this way</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">timeNow</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">timer_getWallTime</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Most <em>(all?)</em> time-related measurements inside BF2 are in seconds, and are based on wall time.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Other time functions are also available</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="kn">import</span> <span class="nn">time</span>
+
+   <span class="c1"># Gives current epoch time (seconds since 1970 Jan 1)</span>
+   <span class="n">epochTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+   <span class="c1"># Or, to get a formatted string containing a more user-friendly date and time</span>
+   <span class="n">dateString</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%m-</span><span class="si">%d</span><span class="s2">-%y %H:%M&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>See the <a class="reference external" href="https://docs.python.org/release/2.3.4/lib/module-time.html">Python Library Reference</a> for more information about ways to manipulate dates and times in Python.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Battlefield Engine</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="coordinates.html">BF2 Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html">BF2 Engine Internals</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Time in BF2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">Battlefield Python</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Battlefield Engine</a><ul>
+      <li>Previous: <a href="internals.html" title="previous chapter">BF2 Engine Internals</a></li>
+      <li>Next: <a href="../modding/index.html" title="next chapter">Modding</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/engine/time.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

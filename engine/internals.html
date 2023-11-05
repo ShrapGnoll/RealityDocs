@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>BF2 Engine Internals &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Time in BF2" href="time.html" />
+    <link rel="prev" title="BF2 Coordinates" href="coordinates.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="bf2-engine-internals">
+<h1>BF2 Engine Internals<a class="headerlink" href="#bf2-engine-internals" title="Permalink to this headline">¶</a></h1>
+<p>The BF2 engine has been written in C++ and also make heavy use of STL.</p>
+<blockquote>
+<div><p>All virtual functions on this page are in the order they are defined in the vtable unless otherwise specified.</p>
+</div></blockquote>
+<div class="section" id="reference-counting">
+<h2>Reference Counting<a class="headerlink" href="#reference-counting" title="Permalink to this headline">¶</a></h2>
+<p>A lot of the internal components of the game use intrusive reference counting through inheritance. The base class would look something like this:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RefCounted</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+   <span class="n">RefCounted</span><span class="p">()</span> <span class="o">:</span> <span class="n">m_refCount</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{}</span>
+
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="n">addRef</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="o">++</span><span class="n">m_refCount</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="n">getRefCount</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">m_refCount</span><span class="p">;</span>
+   <span class="p">}</span>
+
+    <span class="c1">// Unsure if there actually is a base implementation of this method,</span>
+    <span class="c1">// this sometimes points to a unique function in the vtable but follows this pattern.</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="n">release</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">m_refCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">delete</span> <span class="p">(</span><span class="n">RefCounted</span><span class="o">*</span><span class="p">)</span><span class="k">this</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="n">m_refCount</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="c1">// Position of the destructor in the vtable may change.</span>
+   <span class="k">virtual</span> <span class="o">~</span><span class="n">RefCounted</span><span class="p">()</span> <span class="p">{}</span>
+<span class="k">private</span><span class="o">:</span>
+   <span class="kt">int</span> <span class="n">m_refCount</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Do note that this class is not thread-safe, as in the actual implementation.</p>
+</div>
+<div class="section" id="classmanager">
+<h2>ClassManager<a class="headerlink" href="#classmanager" title="Permalink to this headline">¶</a></h2>
+<p>The program contains a single ClassManager instance which is used to dynamically access different subsystems within the game. These subsystems are registered via a string identifier(class name), an instance pointer, the class id and another unknown integer, they can then later be accessed using the class name. The following classes are registered in BF2.exe:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GameServerSettings</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HudInformationLayer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DistributedLightRenderer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LocalProfileManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ProfileManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RankManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ClanManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NewsManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AutoPatch</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Persistence</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MenuTeamManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GlobalSettings</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VideoSettings</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AudioSettings</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ControlSettings</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GeneralSettings</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HapticSettings</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ServerBrowserManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SwiffHost</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DemoLibrary</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ServerLogoManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ModInfo</span></code></p></li>
+</ul>
+<p>The rendering module(RendDX9.dll) also registers the following classes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SwiffRenderer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Terrain</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LightManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GeometryTemplateManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StaticMeshRenderer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SkinnedMeshRenderer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ParticleSystemManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HemiMapManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DecalManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DecalShadowManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RoadCompiledRenderer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RoadEditableRenderer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NametagManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SkyDome</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UndergrowthSystem</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LightingManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WeatherManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RainManager</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RenderView</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EnvMapManager</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="common">
+<h2>Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="gameevent">
+<h3>GameEvent<a class="headerlink" href="#gameevent" title="Permalink to this headline">¶</a></h3>
+<p>The game has multiple event systems, game events are events that occur in-game and are related to gameplay.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">The (incomplete) class below is the base class used by all events, events often have additional data. A GameEvent has a maximum size of 1024 bits as defined by <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">uint</span> <span class="pre">MaximumGameEventSize</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GameEvent</span> <span class="o">:</span> <span class="k">public</span> <span class="n">RefCounted</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+   <span class="n">GameEvent</span><span class="p">()</span> <span class="o">:</span> <span class="n">field_8</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{}</span>
+
+   <span class="c1">// multiple virtual functions here</span>
+<span class="k">private</span><span class="o">:</span>
+   <span class="kt">int</span> <span class="n">field_8</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<p>List of Game events:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ChallengeEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChallengeResponseEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ConnectionTypeEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DataBlockEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreatePlayerEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreateObjectEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreateKitEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DestroyObjectEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DestroyPlayerEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EnterVehicleEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExitVehicleEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PostRemoteEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChangePlayerNameEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HandlePickupEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HandleDropEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StringBlockEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JoinSquadEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LeaveSquadEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CommanderEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RadioMessageEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KilledByEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChangeSquadNameEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SetPrivateSquadEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IssueSquadOrderEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InviteEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RankEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KickBanEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SetAcceptOrderEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SetSquadLeaderEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SpottedEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ArtilleryEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StickyProjectileEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AmbientEffectAreaEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VoipOnOffEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CommanderCamEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SupplyDropEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VoidPlayerMuteEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VoteEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TargetDirectionEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BeginRoundEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EndOfRoundEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PythonCommandEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VoipSessionEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ToggleFreeCameraEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MedalEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UnlockEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MissileInitEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UAVEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ContentCheckEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DropVehicleEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreateSpawnGroupEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RemoveSpawnGroupEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UpdateTriggerEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GrapplingHookContainerCreateEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GrapplingHookContainerUpdateEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GrapplingHookContainerDetachEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GrapplingHookCreateEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GrapplingHookUpdateEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerTearGassedEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SetNightVisionEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VerifyPlayerTeamEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FixPlayerTeamEvent</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="io">
+<h2>IO<a class="headerlink" href="#io" title="Permalink to this headline">¶</a></h2>
+<p>Access to the filesystem is done through the FileManager accessible through the ClassManager.</p>
+<div class="section" id="stream">
+<h3>Stream<a class="headerlink" href="#stream" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Interface used for files, used by FileManager.</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Stream</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+   <span class="k">virtual</span> <span class="kt">unsigned</span> <span class="n">read</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="n">numBytes</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">write</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="n">numBytes</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_1</span><span class="p">()</span> <span class="p">{};</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_2</span><span class="p">()</span> <span class="p">{};</span>
+   <span class="k">virtual</span> <span class="n">Stream</span> <span class="nf">clone</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_3</span><span class="p">()</span> <span class="p">{};</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_4</span><span class="p">()</span> <span class="p">{};</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_5</span><span class="p">()</span> <span class="p">{};</span>
+   <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">seek</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">moveMethod</span><span class="p">,</span> <span class="kt">long</span> <span class="n">distanceToMove</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">unsigned</span> <span class="nf">getPosition</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">unsigned</span> <span class="nf">getSize</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="filesystem">
+<h3>FileSystem<a class="headerlink" href="#filesystem" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Interface used and implemented by the FileManager to access the underlying file system.</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FileSystem</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="n">unk_1</span><span class="p">()</span> <span class="p">{}</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="n">unk_2</span><span class="p">()</span> <span class="p">{}</span>
+   <span class="k">virtual</span> <span class="n">Stream</span><span class="o">*</span> <span class="n">openFile</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span> <span class="n">path</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_3</span><span class="p">()</span> <span class="p">{}</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_4</span><span class="p">()</span> <span class="p">{}</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_5</span><span class="p">()</span> <span class="p">{}</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_6</span><span class="p">()</span> <span class="p">{}</span>
+   <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">readFile</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="n">numBytes</span><span class="p">,</span> <span class="kt">unsigned</span><span class="o">*</span> <span class="n">bytesRed</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">unk_7</span><span class="p">()</span> <span class="p">{}</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">findFiles</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span> <span class="n">folderPath</span><span class="p">,</span> <span class="o">?</span> <span class="n">a</span><span class="p">,</span> <span class="o">?</span> <span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">getFileInfo</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span> <span class="o">?</span> <span class="n">a</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">compareFileTime</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span> <span class="n">otherPath</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">getFullFileName</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span> <span class="n">path</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Battlefield Engine</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="coordinates.html">BF2 Coordinates</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">BF2 Engine Internals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reference-counting">Reference Counting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#classmanager">ClassManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common">Common</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gameevent">GameEvent</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#io">IO</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stream">Stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filesystem">FileSystem</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time in BF2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">Battlefield Python</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Battlefield Engine</a><ul>
+      <li>Previous: <a href="coordinates.html" title="previous chapter">BF2 Coordinates</a></li>
+      <li>Next: <a href="time.html" title="next chapter">Time in BF2</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/engine/internals.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

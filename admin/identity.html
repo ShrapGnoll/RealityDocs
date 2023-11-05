@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Player Identity &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Administrative Module" href="module.html" />
+    <link rel="prev" title="Administration" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="player-identity">
+<h1>Player Identity<a class="headerlink" href="#player-identity" title="Permalink to this headline">¶</a></h1>
+<p>There are several ways a player’s identity can be represented in Battlefield 2; this page discusses them, explains some of their different uses, and shows how to access them and convert one to another.</p>
+<div class="section" id="player-id">
+<h2>Player ID<a class="headerlink" href="#player-id" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Player</span> <span class="pre">ID</span></code> (“playerID”, also known as “index”) is the simplist and most basic way of identifying players, and is the most commonly used throughout the game. The first player to connect to the server is given a Player ID of “0”; the second gets a Player ID of “1”, and so on. At the beginning of the next round the server goes through and re-assigns Player IDs for each player, again beginning at 0, so as to fill in any “holes” in the numbering system created by players who have disconnected.</p>
+<p>Most <a class="reference internal" href="../modding/consolecommands.html"><span class="doc">console commands</span></a> that refer to players use Player ID: for example, <code class="docutils literal notranslate"><span class="pre">admin.kickPlayer</span></code> is followed by a Player ID number. The easiest way to find out which player has which Player ID from the console is to use the <code class="docutils literal notranslate"><span class="pre">admin.listplayers</span></code> command.</p>
+<p>From Python, several methods are available access information about a player based on Player ID, for example <a class="reference internal" href="../python/reference/bf2.html#bf2-playermanager-playermanager"><span class="std std-ref">bf2.playerManager.getPlayerByIndex</span></a> will take a playerID and return the associated playerObject.</p>
+</div>
+<div class="section" id="player-name">
+<h2>Player Name<a class="headerlink" href="#player-name" title="Permalink to this headline">¶</a></h2>
+<p>This is the name that shows up in the colored “name tag” above each player’s head in the BF2 game world, and is also the same as the “account name” that players log into BF2 with. Because players must create an account in order to log in for multiplayer internet play, EA’s account management system insures that each Player Name is unique. On the other hand, there is nothing to stop a single player from signing up with many different Player Names.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">How to find a player’s name from their Player Object</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">playerObject</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>As of BF2 version 1.03, this will return the player’s name AND their ‘prefix’, which is an arbitrary tag, 6 letters in length. RegEx <code class="docutils literal notranslate"><span class="pre">\S{0,6}\s</span></code> will match the entire prefix of a playername for stripping or whatnot. Less precise, but just as effective: <code class="docutils literal notranslate"><span class="pre">\S.*?\s</span></code></p>
+</div>
+<div class="section" id="player-object">
+<h2>Player Object<a class="headerlink" href="#player-object" title="Permalink to this headline">¶</a></h2>
+<p>Player Objects (“playerObjects”) are instances of the <a class="reference internal" href="../python/reference/bf2.html#bf2-playermanager-player"><span class="std std-ref">bf2.PlayerManager.Player</span></a> class, and each of them encapsulate and provide access to much of the information about a specific connected player. PlayerObjects exist from the time a player first connects to a running BF2 server until that server shuts down-even if a player disconnects, BF2 retains his or her Player Object, and if the same player later reconnects to the server, BF2 attempts to reassociate the player with the same Player Object.</p>
+<p>If you want to know the name, score, ping, or other properties of a player, you use methods of the their Player Object.</p>
+</div>
+<div class="section" id="soldier-object">
+<h2>Soldier Object<a class="headerlink" href="#soldier-object" title="Permalink to this headline">¶</a></h2>
+<p>Player Objects are abstractions in the BF2 world-they can be thought of as corresponding to the “spirit” or “ghost” of a player. Soldier Objects (“soldierObjects”), on the other hand, are instances of the <a class="reference internal" href="../python/reference/objects.html#soldierobject"><span class="std std-ref">SoldierObject</span></a> class, and correspond to “physical” objects in the BF2 world, complete with geographic coordinates, orientation, the ability to contain, and be contained by, other physical objects, etc. When a player spawns into a game, a new Soldier Object is created, and their Player Object becomes associated with it. When a player dies, the Soldier Object is destroyed, but the Player Object continues to exist, until the player spawns into the game again.</p>
+<p>If you want to know the location of a player, their current kit and weapon (contained “child” objects), or what vehicle their are riding in (a containing “parent” object), you look at the player’s Soldier Object.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">How find which Soldier Object corresponds to a specific spawned-in player from their Player Object</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">playerObject</span><span class="o">.</span><span class="n">getVehicle</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Other than searching through all possible players, there is no known way to go directly from a Soldier Object to it’s corresponding Player Object. Instead, most of the <a class="reference internal" href="../python/reference/events.html"><span class="doc">game events</span></a> for which you would want to do this send <strong>both</strong> the relevent Player Object and Soldier Object in their callbacks.</p>
+</div>
+<div class="section" id="profile-id">
+<h2>Profile ID<a class="headerlink" href="#profile-id" title="Permalink to this headline">¶</a></h2>
+<p>Profile ID is a <a class="reference external" href="https://www.gamespy.net/">GameSpy</a> ID number that is unique to a specific BF2 player login; no matter what computer, no matter what CD key, no matter what server that player uses, if they login with the same name and password, they will be assigned the same Profile ID. Profile ID can therefore be used to uniquely identify particular players, and is the basis for the EA ranking system: player statistics are tracked by Profile ID.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">How to retrieve the Profile ID for a player</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">playerObj</span><span class="o">.</span><span class="n">getProfileId</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>The profile ID is also stored between the square brackets on the 2nd line of the “gp.info” file, which resides in the root of the BF2 client folder. Note that the file is cumulative so it may contain the info for all the players that have been using the client computer; if so then each player info block is separated by a blank line. — Dimmer (2005-07-29)</p>
+</div>
+<div class="section" id="cd-key-hash">
+<h2>CD Key Hash<a class="headerlink" href="#cd-key-hash" title="Permalink to this headline">¶</a></h2>
+<p>As part of the BF2 client installation process, the user must enter a “CD key” that was provided along with their copy of the game, along with their CDs or DVD. The CD key is supposed to be unique to one specific copy of the game; more than one game can be installed with the same CD key, but EA has various anti-piracy safeguards that will block game copies with duplicate CD keys from functioning in most cases.</p>
+<p>Because the CD key uniquely (for the most part) identifies a particular computer and not any particular player, it can be a useful tool-for example, as a way to ban jerks (<em>smaktards</em>, in technical language) from a server, so that they will be blocked regardless of what login (Profile ID) they use.</p>
+<p>For security reasons, a player’s CD key is never accessible within BF2, but for virtually all purposes, their “CD key hash”, which is available, serves just as well. This “hash” uses the obsolete <a class="reference external" href="https://en.wikipedia.org/wiki/MD5">MD5</a> algorithm to create a <a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">crytographic hash</a> of the player’s CD key (after removing any dashes, and converting it to upper-case). CD key hashes in BF2 are 128-bit numbers, which are typically represented in <a class="reference external" href="https://en.wikipedia.org/wiki/Hexadecimal">hexadecimal</a>; for example: <code class="docutils literal notranslate"><span class="pre">5e851bd2ce31a2b885266537a9c704aa</span></code></p>
+<p>There is no built-in means of determining a player’s CD key hash, but the [playerData](Cookbook:Accessing_CD_Key_Hash “wikilink”) function provides a quick and easy way to get at it. Conversely, the [keyHash](Cookbook:Computing_CD_Key_Hashes “wikilink”) function provides an easy way to convert a CD key into it’s corresponding hash; if you just want to find out what your own key hash is, the fastest way to do that is to use this standalone [key-hashing program](BF2_Key_Hasher “wikilink”).</p>
+</div>
+<div class="section" id="ip-address">
+<h2>IP Address<a class="headerlink" href="#ip-address" title="Permalink to this headline">¶</a></h2>
+<p>[IP address](wikipedia:IP_Address “wikilink”) is the address of a particular computer on a network, such as “<code class="docutils literal notranslate"><span class="pre">192.168.100.1</span></code>”. Generally speaking, a player’s IP address can be used as a way to identify their computer (similar to how CD key hash can be used), as well as to tell something about their location-which country they are in, for example. In practice, care must be used in these applications because many internet service providers use <a class="reference external" href="https://en.wikipedia.org/wiki/Network_address_translation">NAT</a> to dynamically change their customers’ IP addresses from day to day; AOL is the worst, changing addresses from one connection to the next! If you ban or kick a player based on their IP address, they may well reconnect to your server a few minutes later with a different IP address.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">How to access the IP address a player is using from their Player Object</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">playerObject</span><span class="o">.</span><span class="n">getAddress</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>You can also use the [playerData](Scripts:playerData “wikilink”) function to retrieve the same information, along with [CD key hashes](Player_Identity#CD_Key_Hash “wikilink”).</p>
+</div>
+<div class="section" id="punkbuster-guid">
+<h2>PunkBuster GUID<a class="headerlink" href="#punkbuster-guid" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://www.evenbalance.com/index.php?page=support-bf2.php">PunkBuster</a> anti-cheating system is built into Battlefield 2. PunkBuster assigns a “Globally Unique ID”, or GUID, to each user, and uses this for the purpose of tracking and banning players that it detects cheating. In principle, GUIDs are pretty much the same thing as BF2’s [CD key hashes](Player_Identity#CD_Key_Hash “wikilink”), but appear to initialize the MD5 algorithm differently. For all practical purposes, you can think of a player’s GUID as just being a second (and different) CD key hash. Just like CD key hashes, they uniquely identify installed copies of BF2, and so can be used for all the same purposes as CD key hashes.</p>
+<p>PunkBuster GUIDs for players on a server can easily be determined by using the <code class="docutils literal notranslate"><span class="pre">pb_sv_plist</span></code> command from the console. Unfortunately, the “wiring” between BF2 and PunkBuster is such that RCon clients and Python scripts trying to run this command cannot receive any data back; there is therefore no way at present to access GUID information from within a script or from RCon.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administration</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Player Identity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#player-id">Player ID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#player-name">Player Name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#player-object">Player Object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#soldier-object">Soldier Object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profile-id">Profile ID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cd-key-hash">CD Key Hash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ip-address">IP Address</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#punkbuster-guid">PunkBuster GUID</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="module.html">The Administrative Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../engine/index.html">Battlefield Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">Battlefield Python</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Administration</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Administration</a></li>
+      <li>Next: <a href="module.html" title="next chapter">The Administrative Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/admin/identity.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

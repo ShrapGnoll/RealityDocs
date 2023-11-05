@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Battlefield Python &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="reference/index.html" />
+    <link rel="prev" title="The RCon Protocol" href="../networking/protocols_rcon.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="battlefield-python">
+<h1>Battlefield Python<a class="headerlink" href="#battlefield-python" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/events.html">Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/events.html#types-of-events">Types of Events</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#standard-events">Standard Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#game-status-events">Game Status Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#trigger-events">Trigger Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#timer-events">Timer Events</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reference/events.html#descriptions-of-events">Descriptions of Events</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#server-events">Server Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#player-events">Player Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#vehicle-and-kit-events">Vehicle and Kit Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#team-events">Team Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#game-events">Game Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#command-events">Command Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#misc-events">Misc. Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#non-standard-events">Non-Standard Events</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reference/events.html#mysterious-events">Mysterious Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/events.html#event-patterns">Event Patterns</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#player-spawn">Player Spawn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#player-killed">Player Killed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#player-revived">Player Revived</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#flag-change">Flag Change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#player-kicked">Player Kicked</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#player-banned">Player Banned</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/events.html#overall-game-state-change">Overall Game State Change</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/bf2.html">bf2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-gamestatus"><code class="docutils literal notranslate"><span class="pre">bf2.GameStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-gamelogic-gamelogic"><code class="docutils literal notranslate"><span class="pre">bf2.GameLogic.GameLogic</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-gamelogic-serversettings"><code class="docutils literal notranslate"><span class="pre">bf2.GameLogic.ServerSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-objectmanager-objectmanager"><code class="docutils literal notranslate"><span class="pre">bf2.ObjectManager.ObjectManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-playermanager-playerscore"><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.PlayerScore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#class-methods">Class Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#class-attributes-stored-in-the-playerscore-object">Class attributes stored in the <code class="docutils literal notranslate"><span class="pre">PlayerScore</span></code> object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#class-attributes-stored-in-the-bf2-engine">Class attributes stored in the BF2 engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#class-attributes-computed-from-other-attribute-values">Class attributes computed from other attribute values</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-playermanager-player"><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.Player</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#class-attributes">Class Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#id2">Class Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-playermanager-playermanager"><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.PlayerManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-timer"><code class="docutils literal notranslate"><span class="pre">bf2.Timer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#id4">Class Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#project-reality-timer-interface">Project Reality Timer interface</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-triggermanager-triggermanager"><code class="docutils literal notranslate"><span class="pre">bf2.TriggerManager.TriggerManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/bf2.html#bf2-stats-constants"><code class="docutils literal notranslate"><span class="pre">bf2.stats.constants</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/bf2.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/host.html">host</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#event-handler-methods">Event Handler Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#trigger-methods">Trigger Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#global-stats-methods">Global Stats Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#sh-methods-swiffhost"><code class="docutils literal notranslate"><span class="pre">sh</span></code> Methods (SwiffHost?)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#gl-methods-gamelogic"><code class="docutils literal notranslate"><span class="pre">gl</span></code> Methods (GameLogic?)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#sgl-methods-servergamelogic"><code class="docutils literal notranslate"><span class="pre">sgl</span></code> Methods (ServerGameLogic?)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#ss-methods-server-settings"><code class="docutils literal notranslate"><span class="pre">ss</span></code> Methods (Server Settings?)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#object-manager-methods">Object Manager Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#timer-methods">Timer Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#player-manager-methods">Player Manager Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#rcon-methods"><code class="docutils literal notranslate"><span class="pre">RCon</span></code> Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/host.html#logging-methods">Logging Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/objects.html">BF2 Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/objects.html#physicalobject"><code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/objects.html#methods">Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/objects.html#attributes">Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reference/objects.html#weaponobject"><code class="docutils literal notranslate"><span class="pre">WeaponObject</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/objects.html#kitobject"><code class="docutils literal notranslate"><span class="pre">KitObject</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/objects.html#controlpointobject"><code class="docutils literal notranslate"><span class="pre">ControlPointObject</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference/objects.html#id5">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference/objects.html#internal-properties">Internal Properties</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reference/objects.html#vehicleobject"><code class="docutils literal notranslate"><span class="pre">VehicleObject</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/objects.html#soldierobject"><code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bigpicture.html">How Battlefield 2 Hooks Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#important-consideration">Important Consideration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#note">Note</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Learning Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#python-language-resources">Python Language Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#python-cookbooks-idioms-and-design-patterns">Python cookbooks, idioms, and design patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#some-good-printed-books-on-python">Some good printed books on Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#downloading-python">Downloading Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#python-ides">Python IDEs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="realitylogger.html">Reality Logger</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="realitylogger.html#creating-a-logger">Creating a logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="realitylogger.html#using-a-logger">Using a logger</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../engine/index.html">Battlefield Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Battlefield Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/index.html">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bigpicture.html">How Battlefield 2 Hooks Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html">Learning Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="realitylogger.html">Reality Logger</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../networking/protocols_rcon.html" title="previous chapter">The RCon Protocol</a></li>
+      <li>Next: <a href="reference/index.html" title="next chapter">References</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/python/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

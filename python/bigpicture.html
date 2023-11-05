@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>How Battlefield 2 Hooks Python &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Debugging" href="debugging.html" />
+    <link rel="prev" title="BF2 Objects" href="reference/objects.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="how-battlefield-2-hooks-python">
+<h1>How Battlefield 2 Hooks Python<a class="headerlink" href="#how-battlefield-2-hooks-python" title="Permalink to this headline">¶</a></h1>
+<p>Here’s a description of how the BF2 engine interacts with Python code:</p>
+<ol class="arabic simple">
+<li><p>When BF2 engine starts up it fires up its embedded Python interpreter, with it’s sys.path set to include</p>
+<ul class="simple">
+<li><p>The Python standard library (which is contained in the file <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/pylib-2.3.4.zip</span></code>).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/python</span> <span class="pre">directory</span></code></p></li>
+<li><p>The Python directory of the current mod (e.g. <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/mods/bf2/python</span></code>)</p>
+<ul>
+<li><p>If the server switches mods, this will be changed, too. (It appears that the current BF2 game engine doesn’t have the ability to switch mods automatically between rounds-that once a mod is loaded, it stays loaded and running until the server is manually stopped, reconfigured, and restarted).</p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/admin</span></code> directory.</p></li>
+</ul>
+</li>
+<li><p>The BF2 engine imports the <code class="docutils literal notranslate"><span class="pre">bf2</span></code> package (the code for this package is located in the directory <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/python</span></code>).</p></li>
+<li><p>When Python imports a package, it executes the <code class="docutils literal notranslate"><span class="pre">_init_.py</span></code> module in that package. In the case of the <code class="docutils literal notranslate"><span class="pre">bf2</span></code>, the <code class="docutils literal notranslate"><span class="pre">_init_</span></code> module imports and instantiates the basic code and objects needed for the game, including <code class="docutils literal notranslate"><span class="pre">game.scoringCommon</span></code> from the active mod’s python directory (this appears to be the only place any mod-specific Python code gets pulled in).</p></li>
+<li><p>The BF2 engine calls <code class="docutils literal notranslate"><span class="pre">bf2.init_module()</span></code></p>
+<ul class="simple">
+<li><p>That method imports the stats modules</p></li>
+<li><p>Not clear why it’s done this way, instead of just putting everything in the <code class="docutils literal notranslate"><span class="pre">_init_</span></code> module.</p></li>
+</ul>
+</li>
+<li><p>The BF2 engine processes the <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/mods/bf2/settings/ServerSettings.con</span></code> configuration file. In it’s default, out-of-the-box configuration, that file has a directive that causes more Python activity: <code class="docutils literal notranslate"><span class="pre">sv.adminScript</span> <span class="pre">&quot;default&quot;</span></code> causes the <code class="docutils literal notranslate"><span class="pre">default</span></code> module in the directory <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/admin</span></code> to be imported. This module primarily handles the <code class="docutils literal notranslate"><span class="pre">RCon</span></code> interface, but contains an <code class="docutils literal notranslate"><span class="pre">init()</span></code> function that, when called later by the game engine, causes the <code class="docutils literal notranslate"><span class="pre">admin.standard_admin</span></code> package to be imported. This package presently handles team autobalancing and punishing team killing (“TK”). See the <a class="reference internal" href="../admin/module.html"><span class="doc">Admin Module</span></a> for more details.</p></li>
+<li><p>Throughout the start-up process, as packages and modules are imported into the embedded Python interpreter they are registering themselves to receive callbacks when various <a class="reference internal" href="reference/events.html"><span class="doc">events</span></a> occur in the BF2 engine.</p></li>
+<li><p>Some modules need to carry out initialization activities before each round can begin; they arrange for their initialization code to be called by registering to receive callbacks for <code class="docutils literal notranslate"><span class="pre">GameStatusChangedEvents</span></code>. When they receive such a callback and see that the game status is “<code class="docutils literal notranslate"><span class="pre">PreGame</span></code>”, they execute their initialization code.</p></li>
+<li><p>When set-up is complete and the game is running, the Python code that was initialized during start-up then runs in event-driven mode, with the game engine dispatching execution to Python handlers when the events they registered for occur. When a player is killed in the game, for example, a <code class="docutils literal notranslate"><span class="pre">PlayerKilled</span></code> event fires, and any modules that registered to receive a callback for this event (for example, a module related to keeping score) will be called.</p></li>
+<li><p>When a game round ends, it is important to know the game engine <strong>does not</strong> restart, and neither does the embedded Python interpreter - the <code class="docutils literal notranslate"><span class="pre">bf2</span></code> packages are <strong>not</strong> reimported or reinitialized. Instead, during start-up, modules that need to do end-of-round cleanup registered to receive callbacks for <code class="docutils literal notranslate"><span class="pre">GameStatusChangedEvents</span></code>, and when they see the game status change to “<code class="docutils literal notranslate"><span class="pre">EndGame</span></code>” they carry out their cleanup activities.</p></li>
+<li><p>The game engine now jumps back a few steps in this process, to the point where game status changes to “<code class="docutils literal notranslate"><span class="pre">PreGame</span></code>”, and pre-game initialization callback handlers are called to begin the cycle again.</p></li>
+</ol>
+<p>Note that there is another directory of Python code in the <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server</span></code> directory that does <strong>not</strong> get pulled in by the game engine: <code class="docutils literal notranslate"><span class="pre">adminutils</span></code> contains source code and executables for the <code class="docutils literal notranslate"><span class="pre">rotate_demo</span></code> and <code class="docutils literal notranslate"><span class="pre">remoteconsole</span></code> stand-alone applications, as examples of how to write software that will interact with BF2. The fact that these are written in Python is coincidental. (The BF2 engine handles <code class="docutils literal notranslate"><span class="pre">RCon</span></code> and demo recording functionality internally, without using the embedded Python interpreter, although there are events connected with these functions that can be used to hook your own Python code to them).</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../engine/index.html">Battlefield Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Battlefield Python</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="reference/index.html">References</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">How Battlefield 2 Hooks Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html">Learning Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="realitylogger.html">Reality Logger</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Battlefield Python</a><ul>
+      <li>Previous: <a href="reference/objects.html" title="previous chapter">BF2 Objects</a></li>
+      <li>Next: <a href="debugging.html" title="next chapter">Debugging</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/python/bigpicture.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

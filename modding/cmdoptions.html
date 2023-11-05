@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Command Line Options &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title=".con File Grammar" href="congrammar.html" />
+    <link rel="prev" title="Modding" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="command-line-options">
+<h1>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h1>
+<p>Battlefield 2 supports quite a few command line options. Most of you are probably already familiar with ones such as <code class="docutils literal notranslate"><span class="pre">+fullscreen</span> <span class="pre">1</span></code>. Incase some of you don’t know, you can set a command line option by bringing up a shortcut’s properties, going to the shorcut tab, and adding any of these options to the end of the ‘Target’ field. Command line options can only be set on shorcuts, which is useful because it allows you to have multiple shortcuts, all with different command line options. The following is a list of known command line options.</p>
+<p>NOTE: The following options were found with the debug version of the BF2.exe, so some of these options may not work with the normal BF2.exe. The debug build can be obtained by downloading and installing the Battlefield 2 Editor. Once installed the debug build is named BF2_r.exe in your main Battlefield 2 directory. The Battlefield 2 Editor can be downloaded at <a class="reference external" href="http://www.fileplanet.com/155852/download/Battlefield-2-Editor">Battlefield 2 Editor</a> Also, case does matter when using these options.</p>
+<div class="section" id="basic-options">
+<h2>Basic Options<a class="headerlink" href="#basic-options" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+multi</span></code></p></td>
+<td><p>Allows you to start multiple instances of Battlefield 2 at the same time.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+multi</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+joinServer</span></code></p></td>
+<td><p>Joins the specified server. Accepts either a server ip or a hostname.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+joinServer</span></code> <code class="docutils literal notranslate"><span class="pre">OR</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+playerName</span></code></p></td>
+<td><p>Sets the player name.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+playerName</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+password</span></code></p></td>
+<td><p>Used in conjunction with <code class="docutils literal notranslate"><span class="pre">+joinServer</span></code> when the server requires a password. Possibly also sets the password for a dedicated server?</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+password</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+lowPriority</span></code></p></td>
+<td><p>Runs Battlefield 2 with a lower process priority(less CPU intensive, lower performance)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+lowPriority</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+loadLevel</span></code></p></td>
+<td><p>Loads the specified level.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+loadLevel</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+wx</span></code></p></td>
+<td><p>When Battlefield 2 is running in windowed mode, this sets the window’s horizontal position on the screen. When setting this option, keep in mind that 0 corresponds to the left of the screen, and that the window is being positioned from its left side.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+wx</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+wy</span></code></p></td>
+<td><p>When Battlefield 2 is running in windowed mode, this sets the window’s vertical position on the screen. When setting this option, keep in mind that 0 corresponds to the top of the screen, and that the window is being positioned from its top side.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+wy</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+szx</span></code></p></td>
+<td><p>When Battlefield 2 is running in windowed mode, this sets the window’s horizontal size.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+szx</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+szy</span></code></p></td>
+<td><p>When Battlefield 2 is running in windowed mode, this sets the window’s vertical size.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+szy</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+loadObfuscated</span></code></p></td>
+<td><p>Load obfuscated shaders. No idea what that means.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+loadObfuscated</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+fullscreen</span></code></p></td>
+<td><p>Toggles Battlefield 2 between windowed and full screen mode.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+fullscreen</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+noSound</span></code></p></td>
+<td><p>Starts Battlefield 2 with sound disabled.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+noSound</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+lateLoading</span></code></p></td>
+<td><p>If set to 1, then resources (only sound at the moment) will be loaded on first use.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+lateLoading</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+skipMips</span></code></p></td>
+<td><p>Sets how many mip-levels to skip in textures.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+skipMips</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+mergeMaterials</span></code></p></td>
+<td><p>Concatenate materials at load time.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+mergeMaterials</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+managedTextures</span></code></p></td>
+<td><p>Decides whether system memory should be used for textures.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+managedTextures</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+debugOutput</span></code></p></td>
+<td><p>Enables or disables debug output.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+debugOutput</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+demo</span></code></p></td>
+<td><p>Sets the con-file with demo options. Not sure what this does.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+demo</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+pyVerbose</span></code></p></td>
+<td><p>Display verbose Python script output. Nothing too interesting here.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+pyVerbose</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+modPath</span></code></p></td>
+<td><p>Sets Battlefield 2’s mod path. This is normally <code class="docutils literal notranslate"><span class="pre">mods/bf2</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+modPath</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+ignoreAsserts</span></code></p></td>
+<td><p>Ignores debug assertion errors. This can only be used in conjunction with <code class="docutils literal notranslate"><span class="pre">+developer</span> <span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">+dedicated</span> <span class="pre">1</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+ignoreAsserts</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+disableShaderCache</span></code></p></td>
+<td><p>Disables the shader cache. This should only be used in conjunction with <code class="docutils literal notranslate"><span class="pre">+developer</span> <span class="pre">1</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+disableShaderCache</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+dumpAllConFiles</span></code></p></td>
+<td><p>Writes the names of every <code class="docutils literal notranslate"><span class="pre">.con</span></code> file to <code class="docutils literal notranslate"><span class="pre">mods/$MOD$/allConFiles.con</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+dumpAllConFiles</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+customConFile</span></code></p></td>
+<td><p>Uses the specified <code class="docutils literal notranslate"><span class="pre">.con</span></code> file instead of loading all of the <code class="docutils literal notranslate"><span class="pre">.con</span></code> files. This file should be used to specify which con files to run, using the <code class="docutils literal notranslate"><span class="pre">run</span></code> command.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+customConFile</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+help</span></code></p></td>
+<td><p>Displays command line option help, which lists all command line options and gives some descriptions.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+help</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+?</span></code></p></td>
+<td><p>Does the same thing as <code class="docutils literal notranslate"><span class="pre">+help</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+?</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+fileMonitor</span></code></p></td>
+<td><p>Enables automatic update of changed files (shaders, etc). This could prove to be very useful if it applies to <code class="docutils literal notranslate"><span class="pre">.con</span></code> and <code class="docutils literal notranslate"><span class="pre">.py</span></code> files.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+fileMonitor</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+playerPassword</span></code></p></td>
+<td><p>Sets the player’s password</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+playerPassword</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+developer</span></code></p></td>
+<td><p>Does not auto-login, and also allows other command line options to be used in conjunction with it.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+developer</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+disableSwiff</span></code></p></td>
+<td><p>Disables swiff player. Basically this disables the flash that is used at the main menu area. Swiff refers to <code class="docutils literal notranslate"><span class="pre">.swf</span></code>, the flash file format.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+disableSwiff</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+debugSwiff</span></code></p></td>
+<td><p>Enables swiff debug output. Swiff refers to <code class="docutils literal notranslate"><span class="pre">.swf</span></code>, the flash file format.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+debugSwiff</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+playNow</span></code></p></td>
+<td><p>Starts up the game and automatically uses the ‘Play Now’ functionality.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+playNow</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+pbPath</span></code></p></td>
+<td><p>Sets the path to Punkbuster for multiple-instance configurations. This is normally <code class="docutils literal notranslate"><span class="pre">{install_dir}/pb</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+pbPath</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+keepCollisionForNavMeshes</span></code></p></td>
+<td><p>Keep collision mesh lods needed to generate AI navigation meshes. Not sure what this does.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+keepCollisionForNavMeshes</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+restart</span></code></p></td>
+<td><p>Used by BF2 to restart the game without showing video for example when mod switching - can also be used to start BF 2 without showing videos using your own shortcuts</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+restart</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+port</span></code></p></td>
+<td><p>Used for specifying a port number to connect to in conjuntion with <code class="docutils literal notranslate"><span class="pre">+joinServer</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+port</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dedicated-server-options">
+<h2>Dedicated Server Options<a class="headerlink" href="#dedicated-server-options" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+dedicated</span></code></p></td>
+<td><p>Starts Battlefield 2 in dedicated server mode. Not needed on Linux</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+dedicated</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+port</span></code></p></td>
+<td><p>Specifies which port the server should use.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+port</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+maxPlayers</span></code></p></td>
+<td><p>Sets max number of players for the server.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+maxPlayers</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+gameMode</span></code></p></td>
+<td><p>Sets the gamemode for the server.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+gameMode</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+config</span></code></p></td>
+<td><p>Sets the path to the ServerSettings.con file to use.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+config</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+mapList</span></code></p></td>
+<td><p>Sets the path to the mapList.con file to use.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+mapList</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+noStatusMonitor</span></code></p></td>
+<td><p>If you don’t want to run bf2 inside screen you need to use this.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+noStatusMonitor</span></code> with values 1 (or 0 the default if you don’t specify this option at all)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+ranked</span></code></p></td>
+<td><p>Allows gamespy snapshot sending. This setting will do nothing unless EA has the IP of the server in their database.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+ranked</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="advanced-options">
+<h2>Advanced Options<a class="headerlink" href="#advanced-options" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+hostServer</span></code></p></td>
+<td><p>Unknown at the moment. Most likely starts a local server.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+hostServer</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+checkForAvailablePatch</span></code></p></td>
+<td><p>Unknown at the moment. Most likely does what the name says. When used with the debug build, returns an error message on startup. Appears to be broken.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+checkForAvailablePatch</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+checkForPatch</span></code></p></td>
+<td><p>Unknown at the moment. How does this differ from <code class="docutils literal notranslate"><span class="pre">+checkForAvailablePatch</span></code>? When used with the debug build, returns an error message on startup. Appears to be broken.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+checkForPatch</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+aidll</span></code></p></td>
+<td><p>Unknown at the moment. Perhaps disables or enables the Battlefield 2 aidll.dll?</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+aidll</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+ai</span></code></p></td>
+<td><p>Used to Force BF2 to load AI BOTS! No matter the map, requirements, or settings. –MasterX</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+ai</span> <span class="pre">&lt;0/1&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+refresh</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+refresh</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+renderMode</span></code></p></td>
+<td><p>Sets the current render mode. Possible render modes are 0-5, not sure what each one does yet.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+renderMode</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+rp</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+rp</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+deviceType</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+deviceType</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+deviceBehavior</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+deviceBehavior</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+skipMeshLods</span></code></p></td>
+<td><p>Unknown at the moment. <a class="reference external" href="http://en.wikipedia.org/wiki/Level_of_Detail">LOD</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+skipMeshLods</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+keepTemplates</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+keepTemplates</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+profileTextureUsage</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+profileTextureUsage</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+convertCollisionMeshes</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+convertCollisionMeshes</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+generateLightMaps</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+generateLightMaps</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+debugNetwork</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+debugNetwork</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+debugGhostManager</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+debugGhostManager</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+compile</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+compile</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+useCompiled</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+useCompiled</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">+NoEffectTextureAtlas</span></code></p></td>
+<td><p>Unknown at the moment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+NoEffectTextureAtlas</span> <span class="pre">&lt;??&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+menu</span></code></p></td>
+<td><p>Unknown at the moment. This is used by Battlefield 2’s default shortcut as <code class="docutils literal notranslate"><span class="pre">+menu</span> <span class="pre">1</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+menu</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../engine/index.html">Battlefield Engine</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Modding</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Command Line Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-options">Basic Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dedicated-server-options">Dedicated Server Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-options">Advanced Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="congrammar.html"><code class="docutils literal notranslate"><span class="pre">.con</span></code> File Grammar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="consolecommands.html">BF2 Console Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemrequirements.html">Server System Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">Battlefield Python</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Modding</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Modding</a></li>
+      <li>Next: <a href="congrammar.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">.con</span></code> File Grammar</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/modding/cmdoptions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

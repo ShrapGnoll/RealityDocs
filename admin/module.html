@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>The Administrative Module &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Battlefield Engine" href="../engine/index.html" />
+    <link rel="prev" title="Player Identity" href="identity.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="the-administrative-module">
+<h1>The Administrative Module<a class="headerlink" href="#the-administrative-module" title="Permalink to this headline">¶</a></h1>
+<p>Battlefield 2 provides for a Python “administrative” module; this module can do pretty much anything, but the Python code that ships with BF2 serves two basic roles:</p>
+<ul class="simple">
+<li><p>It implements the BF2 RCon (“Remote Console”) interface</p></li>
+<li><p>It implements several in-game automatic administration functions; the standard module automatically balances the number of players on each team, and handles punishment of players for killing teammates (“TK”ing).</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">sv.adminScript</span></code> server configuration directive tells the BF2 game engine which administrative module should be loaded as the engine is starting up; this directive gives the name of the Python module to load in the <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/admin</span></code> directory; the default administrative module that ships with BF2 is called, appropriately, <code class="docutils literal notranslate"><span class="pre">default</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sv</span><span class="o">.</span><span class="n">adminScript</span> <span class="s2">&quot;default&quot;</span>
+</pre></div>
+</div>
+<p>You can create your own administrative modules; just put them in the <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/admin</span></code> directory and change the setting for <code class="docutils literal notranslate"><span class="pre">sv.adminScript</span></code> in the <code class="docutils literal notranslate"><span class="pre">ServerSettings.con</span></code> file. One example of a custom administrative module can be found [[Scripts:Modified_admin_script|here]] (in this case, it’s an expansion of the <code class="docutils literal notranslate"><span class="pre">default</span></code> module that adds more features).</p>
+<div class="section" id="module-methods">
+<h2>Module Methods<a class="headerlink" href="#module-methods" title="Permalink to this headline">¶</a></h2>
+<p>Any administrative module, including <code class="docutils literal notranslate"><span class="pre">default</span></code>, has three methods which are called by the game engine itsef:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">init()</span></code></p>
+<p>The game engine calls this method while it is <a class="reference internal" href="../python/bigpicture.html"><span class="doc">starting up</span></a>; in the <code class="docutils literal notranslate"><span class="pre">default</span></code> module, this method reads the admin configuration file (<code class="docutils literal notranslate"><span class="pre">default.cfg</span></code>), initializes the admin system, registers to receive <a class="reference internal" href="../python/reference/events.html"><span class="doc">RemoteCommand events</span></a>, etc.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></p>
+<p>The game engine calls this method when the server is shutting down (shutting down completely-not just after each game round). In the <code class="docutils literal notranslate"><span class="pre">default</span></code> module this method just closes the TCP socket used for receiving RCon commands from the network.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update()</span></code></p>
+<p>The game engine calls this method roughly every 30ms; in the <code class="docutils literal notranslate"><span class="pre">default</span></code> module, this method checks for any new input arriving over the network TCP RCon socket.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="rcon">
+<h2><code class="docutils literal notranslate"><span class="pre">RCon</span></code><a class="headerlink" href="#rcon" title="Permalink to this headline">¶</a></h2>
+<p>BF2 includes an <code class="docutils literal notranslate"><span class="pre">RCon</span></code> (Remote Console) function that allows many administrative functions that can be done from the regular console (the black-and-white curses interface on the machine running the BF2 server) to be done from a “remote console”-either from within a BF2 game client (accessed by a player pressing the <code class="docutils literal notranslate"><span class="pre">~</span></code> key), or via a TCP network interface.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">RCon</span></code> interface is implemented completely in Python, with the code in the <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/admin</span></code> directory. The game engine provides five facilities that this Python code uses:</p>
+<ul class="simple">
+<li><p>As part of it’s <a class="reference internal" href="../python/bigpicture.html"><span class="doc">start-up procedure</span></a>, the server imports the Python module in the <code class="docutils literal notranslate"><span class="pre">admin</span></code> directory specified by the <code class="docutils literal notranslate"><span class="pre">sv.adminScript</span></code> directive. This is normally the <code class="docutils literal notranslate"><span class="pre">default</span></code> module, but the fact that it’s imported based on a configuration directive means that it could easily be changed to a custom module.</p></li>
+<li><p>The game engine provides an event, <a class="reference internal" href="../python/reference/events.html"><span class="doc">RemoteCommand</span></a>, that fires whenever an in-game player accesses their console and types any line beginning with “rcon”. The event passes any registered callback handlers the actual command typed by the player. This is how the <code class="docutils literal notranslate"><span class="pre">default</span></code> module receives <code class="docutils literal notranslate"><span class="pre">RCon</span></code> commands from players (but it can be used by other Python code, as well).</p></li>
+<li><p>The game engine provides a method, <code class="docutils literal notranslate"><span class="pre">host.rcon_feedback</span></code>, that can be used to send messages to a player’s in-game console. This is what the <code class="docutils literal notranslate"><span class="pre">default</span></code> module uses to send responses to players’ <code class="docutils literal notranslate"><span class="pre">RCon</span></code> commands back to them (but it can be used by other Python code, also).</p></li>
+<li><p>The game engine calls the <code class="docutils literal notranslate"><span class="pre">update</span></code> method of the <code class="docutils literal notranslate"><span class="pre">default</span></code> module (or whatever module has been specified by <code class="docutils literal notranslate"><span class="pre">sv.adminScript</span></code>) repeatedly, generally about every 30 milliseconds (roughly 30 times per second). The <code class="docutils literal notranslate"><span class="pre">default</span></code> module uses this to run a fast check for input on a TCP port (normally port 4711) for <code class="docutils literal notranslate"><span class="pre">RCon</span></code> commands-this is how the network <code class="docutils literal notranslate"><span class="pre">RCon</span></code> interface receives commands. More information about the <code class="docutils literal notranslate"><span class="pre">RCon</span></code> protocol the <code class="docutils literal notranslate"><span class="pre">default</span></code> module implements can be found in the <a class="reference internal" href="../networking/protocols_rcon.html"><span class="doc">RCon Protocol Specification</span></a>.</p></li>
+<li><p>When the <code class="docutils literal notranslate"><span class="pre">default</span></code> module decides to execute a console command from a remote user, it passes it on to the game engine for execution using the <code class="docutils literal notranslate"><span class="pre">host.rcon_invoke</span></code> method. This method isn’t specific to <code class="docutils literal notranslate"><span class="pre">RCon</span></code> commands-in fact, it doesn’t execute <code class="docutils literal notranslate"><span class="pre">RCon</span></code> commands at all-it executes server console commands, and can be used to good effect by any Python code. Note, however, that there is presently a bug in BF2 that prevents any feedback from PunkBuster commands from being sent back to the caller of <code class="docutils literal notranslate"><span class="pre">host.rcon_invoke</span></code>; since this is the only way remote console commands are executed, it means that <code class="docutils literal notranslate"><span class="pre">RCon</span></code> users can never see any feedback from PunkBuster commands they send via <code class="docutils literal notranslate"><span class="pre">RCon</span></code>.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">default</span></code> module implements just three RCon commands (but could easily be extended to add others):</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">login</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">default</span></code> won’t accept any other RCon commands until this command is given with the valid password, as specified in the <code class="docutils literal notranslate"><span class="pre">default.cfg</span></code> file.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">users</span></code></p>
+<p>Lists players connected to the server, along with their <a class="reference internal" href="identity.html"><span class="doc">IP Addresses and CD key hashes</span></a>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exec</span></code></p>
+<p>Executes any server command.</p>
+</li>
+</ul>
+<p>(Note that from a player’s in-game console window, each of these commands must be preceeded by the word “rcon” to cause the game engine to send it to the <code class="docutils literal notranslate"><span class="pre">default</span></code> module; from a TCP RCon connection, these commands are typed exactly as shown).</p>
+</div>
+<div class="section" id="other-administrative-functions">
+<h2>Other Administrative Functions<a class="headerlink" href="#other-administrative-functions" title="Permalink to this headline">¶</a></h2>
+<p>When the game engine imports the <code class="docutils literal notranslate"><span class="pre">default</span></code> administrative module, one of the things the module does is to import the <code class="docutils literal notranslate"><span class="pre">standard_admin</span></code> module. When <code class="docutils literal notranslate"><span class="pre">standard_admin</span></code> is imported, it in turn imports and initializes two other modules:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">standard_admin.autobalance</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">standard_admin.tk_punish</span></code></p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="identity.html">Player Identity</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The Administrative Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-methods">Module Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rcon"><code class="docutils literal notranslate"><span class="pre">RCon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-administrative-functions">Other Administrative Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../engine/index.html">Battlefield Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/index.html">Battlefield Python</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Administration</a><ul>
+      <li>Previous: <a href="identity.html" title="previous chapter">Player Identity</a></li>
+      <li>Next: <a href="../engine/index.html" title="next chapter">Battlefield Engine</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/admin/module.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

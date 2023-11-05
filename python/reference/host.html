@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>host &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="BF2 Objects" href="objects.html" />
+    <link rel="prev" title="bf2" href="bf2.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="host">
+<h1>host<a class="headerlink" href="#host" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">host</span></code> object encapsulates the interfaces between the main BF2 engine (written in C++) and Python modules. Most <code class="docutils literal notranslate"><span class="pre">host</span></code> methods will generally not need to be used directly from within Python modules, as standard BF2 Python modules (like <code class="docutils literal notranslate"><span class="pre">bf2.GameLogic</span></code>, for example) provide object-oriented wrappers around most of the raw BF2 engine functions.</p>
+<p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">host</span></code> to access the methods and attributes shown here.</p>
+<div class="section" id="event-handler-methods">
+<h2>Event Handler Methods<a class="headerlink" href="#event-handler-methods" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.registerHandler('EventName',</span> <span class="pre">eventHandler[,</span> <span class="pre">alwaysCall])</span></code></p>
+<p>Registers a function to handle an event. If <code class="docutils literal notranslate"><span class="pre">alwaysCall</span></code> is not specified the handler will only be called when the game is in the “Playing” state–not in the “Pregame” and “Postgame” states. If you would like it to run in Pregame and Postgame as well, <code class="docutils literal notranslate"><span class="pre">alwaysCall</span></code> must be specified and evaluate as true (e.g. “1”).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.registerGameStatusHandler(gameStatusEventHandler)</span></code></p>
+<p>Registers a function to handle a game status event.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.unregisterGameStatusHandler(gameStatusEventHandler)</span></code></p>
+<p>Unregisters a game status event-handling function.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="trigger-methods">
+<h2>Trigger Methods<a class="headerlink" href="#trigger-methods" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">host.trig_create(object,</span> <span class="pre">callback,</span> <span class="pre">objName,</span> <span class="pre">radius,</span> <span class="pre">unknownBool,</span> <span class="pre">data)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.trig_getObjects(trig_id)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.trig_destroyAll()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.trig_destroy(trig_id)</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="global-stats-methods">
+<h2>Global Stats Methods<a class="headerlink" href="#global-stats-methods" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_gamespyStatsNewGame()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_gamespyStatsEndGame()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_gamespyStatsSendSnapshotFinal(snapShot)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_gamespyStatsSendSnapshotUpdate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_getStatsKeyVal(key)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_plrRequestAwards(playerIndex,</span> <span class="pre">unknown,</span> <span class="pre">unknown)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_plrRequestStats(playerIndex,</span> <span class="pre">unknown,</span> <span class="pre">urlToStatType)</span></code></p>
+<p>Presumably returns the specified stat of the specified player.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_plrRequestUnlocks(playerIndex,</span> <span class="pre">unknown)</span></code></p>
+<p>Presumably returns the specified player’s unlocks.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_plrSetUnlocks(playerIndex,</span> <span class="pre">unknown,</span> <span class="pre">unknown)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pers_plrAwardMedal</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="sh-methods-swiffhost">
+<h2><code class="docutils literal notranslate"><span class="pre">sh</span></code> Methods (SwiffHost?)<a class="headerlink" href="#sh-methods-swiffhost" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sh_setEnableCommander(bool)</span></code></p>
+<p>Enables or disables the commander position.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="gl-methods-gamelogic">
+<h2><code class="docutils literal notranslate"><span class="pre">gl</span></code> Methods (GameLogic?)<a class="headerlink" href="#gl-methods-gamelogic" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.gl_sendEndOfRoundData(dataString)</span></code></p>
+<p>Presumably sends stats-related information to clients when a round ends.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="sgl-methods-servergamelogic">
+<h2><code class="docutils literal notranslate"><span class="pre">sgl</span></code> Methods (ServerGameLogic?)<a class="headerlink" href="#sgl-methods-servergamelogic" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_getSettingsBool</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_sendTextMessage(playerId,</span> <span class="pre">10,</span> <span class="pre">1,</span> <span class="pre">message)</span></code></p>
+<p>Send a server message to one player. Working Status Unknown</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_sendRankEvent(playerIndex,</span> <span class="pre">rank,</span> <span class="pre">score)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_sendMedalEvent(playerIndex,</span> <span class="pre">type,</span> <span class="pre">value)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_sendPythonEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_sendGameLogicEvent(playerID,</span> <span class="pre">event,</span> <span class="pre">data)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_sendHudEvent(playerID,</span> <span class="pre">event,</span> <span class="pre">data)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_getIsAIGame()</span></code></p>
+<p>Presumably returns whether or not the current game has AI.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_getControlPointsInGroup</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_endGame(winner,</span> <span class="pre">victoryType)</span></code></p>
+<p>Presumably ends a current game, awarding victory of victoryType to winner.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_getParam(name,</span> <span class="pre">unknown,</span> <span class="pre">unknown)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_setParam(name,</span> <span class="pre">unknown,</span> <span class="pre">unknown,</span> <span class="pre">unknown)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_getWorldSize()</span></code></p>
+<p>returns a tuple giving the north/south and east/west dimensions of the current map, more-or-less in meters.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_getMapName()</span></code></p>
+<p>Returns the current map name.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.sgl_getModDirectory()</span></code></p>
+<p>Returns the directory containing the currently active mod.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="ss-methods-server-settings">
+<h2><code class="docutils literal notranslate"><span class="pre">ss</span></code> Methods (Server Settings?)<a class="headerlink" href="#ss-methods-server-settings" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.ss_getParam(parameter)</span></code></p>
+<p>Returns value of specified setting.</p>
+<p>Settings include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ticketRatio</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">teamRatioPct</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maxPlayers</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gameMode</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mapName</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeLimit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scoreLimit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">autoBalance</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tkpEnabled</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tkpNeeded</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tkpDefault</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">globRank</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">globUnlocks</span></code></p></li>
+</ul>
+<p>You cannot find out server name, port and other similar information this way. Instead, use f.e. host.rcon_invoke(‘sv.serverName’) to get the server name.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="object-manager-methods">
+<h2>Object Manager Methods<a class="headerlink" href="#object-manager-methods" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">host.omgr_getObjectsOfTemplate(template)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.omgr_getObjectsOfType(type)</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="timer-methods">
+<h2>Timer Methods<a class="headerlink" href="#timer-methods" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.timer_created(timer)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.timer_getTimers</span></code></p>
+<p><strong>Do not use, unfinished DICE code.</strong></p>
+<p>Creates a Tuple and only fills one slot. Trying to access the other slots will crash the server.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.timer_destroy(timer)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.timer_getWallTime()</span></code></p>
+<p>Return the number of seconds since server started -  see <a class="reference internal" href="../../engine/time.html"><span class="doc">BF2 Time</span></a></p>
+</li>
+</ul>
+</div>
+<div class="section" id="player-manager-methods">
+<h2>Player Manager Methods<a class="headerlink" href="#player-manager-methods" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_enableScoreEvents</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_getScore(playerIndex,</span> <span class="pre">name)</span></code></p>
+<p>Gets value of score name of specified player.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_setScore(playerIndex,</span> <span class="pre">name,</span> <span class="pre">value)</span></code></p>
+<p>Sets value of score name of specified player.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_p_get(name,</span> <span class="pre">playerIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_p_set(name,</span> <span class="pre">playerIndex,</span> <span class="pre">value)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_isIndexValid(index)</span></code></p>
+<p>Checks the validity of specified player index.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_getCommander()</span></code></p>
+<p>Presumably returns Player object for the current commander.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_getPlayers()</span></code></p>
+<p>Returns current player objects.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.pmgr_getNumberOfPlayers()</span></code></p>
+<p>Returns number of players.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="rcon-methods">
+<h2><code class="docutils literal notranslate"><span class="pre">RCon</span></code> Methods<a class="headerlink" href="#rcon-methods" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.rcon_invoke(command)</span></code></p>
+<p>Executes a server console command.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.rcon_feedback(playerid,</span> <span class="pre">message)</span></code></p>
+<p>Send a message to an in-game player <code class="docutils literal notranslate"><span class="pre">RCon</span></code> client.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="logging-methods">
+<h2>Logging Methods<a class="headerlink" href="#logging-methods" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host.log(message)</span></code></p>
+<p>Send a message to the log.</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../engine/index.html">Battlefield Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Battlefield Python</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">References</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bf2.html">bf2</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">host</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#event-handler-methods">Event Handler Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#trigger-methods">Trigger Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-stats-methods">Global Stats Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sh-methods-swiffhost"><code class="docutils literal notranslate"><span class="pre">sh</span></code> Methods (SwiffHost?)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gl-methods-gamelogic"><code class="docutils literal notranslate"><span class="pre">gl</span></code> Methods (GameLogic?)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgl-methods-servergamelogic"><code class="docutils literal notranslate"><span class="pre">sgl</span></code> Methods (ServerGameLogic?)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ss-methods-server-settings"><code class="docutils literal notranslate"><span class="pre">ss</span></code> Methods (Server Settings?)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#object-manager-methods">Object Manager Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timer-methods">Timer Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#player-manager-methods">Player Manager Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rcon-methods"><code class="docutils literal notranslate"><span class="pre">RCon</span></code> Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logging-methods">Logging Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="objects.html">BF2 Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../bigpicture.html">How Battlefield 2 Hooks Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../learning.html">Learning Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../realitylogger.html">Reality Logger</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Battlefield Python</a><ul>
+  <li><a href="index.html">References</a><ul>
+      <li>Previous: <a href="bf2.html" title="previous chapter">bf2</a></li>
+      <li>Next: <a href="objects.html" title="next chapter">BF2 Objects</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/python/reference/host.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

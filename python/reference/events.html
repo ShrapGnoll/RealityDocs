@@ -1,0 +1,569 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Events &#8212; RealityDocs  documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bf2" href="bf2.html" />
+    <link rel="prev" title="References" href="index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="events">
+<h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+<p>The interaction between the BF2 engine and Python programs is largely <a class="reference external" href="https://en.wikipedia.org/wiki/Event-driven_programming">event-driven</a>: when an “event” happens in a game, BF2 checks to see if any Python programs have registered to be notified of that particular event; if they have, they are called (a “callback”). One way to think about this: the events are “hooks” into the game engine to which you can attach your own Python code.</p>
+<p>Multiple callbacks can be registered for any given event; all registered callbacks will be executed when the event occurs. For example, if three different programs have registered for the “PlayerConnect” event, then when a new player connects, all three of those programs will be run.</p>
+<div class="section" id="types-of-events">
+<h2>Types of Events<a class="headerlink" href="#types-of-events" title="Permalink to this headline">¶</a></h2>
+<p>The BF2 engine supports five types of events</p>
+<div class="section" id="standard-events">
+<h3>Standard Events<a class="headerlink" href="#standard-events" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">These are events that occur during the normal course of gameplay</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">host</span><span class="o">.</span><span class="n">registerHandler</span><span class="p">(</span><span class="s1">&#39;EventName&#39;</span><span class="p">,</span> <span class="n">pythonEventHandler</span><span class="p">[,</span> <span class="n">parameter</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>This registration will typically be done in the init() method of an object, but could be done anywhere in your code.</p>
+</div>
+<div class="section" id="game-status-events">
+<h3>Game Status Events<a class="headerlink" href="#game-status-events" title="Permalink to this headline">¶</a></h3>
+<p>The BF2 engine generates these events when the status of the game changes.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">You register to receive callbacks for these events</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">host</span><span class="o">.</span><span class="n">registerGameStatusHandler</span><span class="p">(</span><span class="n">pythonEventHandler</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The possible states game status can be in (as enumerated in <a class="reference internal" href="bf2.html"><span class="doc">bf2.GameStatus</span></a>) are:</p>
+<ul class="simple">
+<li><p>NotConnected</p></li>
+<li><p>PreGame</p></li>
+<li><p>Playing</p></li>
+<li><p>Paused</p></li>
+<li><p>EndGame</p></li>
+<li><p>RestartServer</p></li>
+</ul>
+<p>Game status events are usually used to kick off pre-game initialization or post-game clean-up processing.</p>
+</div>
+<div class="section" id="trigger-events">
+<h3>Trigger Events<a class="headerlink" href="#trigger-events" title="Permalink to this headline">¶</a></h3>
+<p>“Trigger” events activate when a vehicle comes within a specified distance of an object.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Triggers are created and registered for by” bf2.triggerManager.</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">createHemiSphericalTrigger</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">triggerEventHandler</span><span class="p">,</span> <span class="n">objectName</span><span class="p">,</span> <span class="n">radius</span><span class="p">[,</span> <span class="n">data</span><span class="p">])</span>
+
+   <span class="n">bf2</span><span class="o">.</span><span class="n">triggerManager</span><span class="o">.</span><span class="n">createRadiusTrigger</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">triggerEventHandler</span><span class="p">,</span> <span class="n">objectName</span><span class="p">,</span> <span class="n">radius</span><span class="p">[,</span> <span class="n">data</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>In standard Battlefield 2, trigger events are used to track scoring for flag captures (triggers activate whenever a player enters or leaves a fixed radius around each control point), as well as effects such as birds (birds are triggered to take flight whenever a player enter their trigger radius).</p>
+</div>
+<div class="section" id="timer-events">
+<h3>Timer Events<a class="headerlink" href="#timer-events" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Timer events activate when a certain amount of time has elapsed.</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">bf2</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">timerEventHandler</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alwaysTrigger</span><span class="p">[,</span> <span class="n">data</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>In standard Battlefield 2, timer events are used to cause periodic status checks related to scoring, ranking, punishing TKs, etc.</p>
+<blockquote>
+<div><p>See the description of the <a class="reference internal" href="bf2.html"><span class="doc">bf2.Timer</span></a> class for details.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="descriptions-of-events">
+<h2>Descriptions of Events<a class="headerlink" href="#descriptions-of-events" title="Permalink to this headline">¶</a></h2>
+<p>EA/DICE have not published a list of events, but here is a list of events that have been discovered so far.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">EventName</span></code> is the name of the event to register for with host. <code class="docutils literal notranslate"><span class="pre">registerHandler</span></code>; the parameters are the parameters your handler should receive when called.</p>
+<p>Some notes about some of the arguments used in these descriptions:</p>
+<ul class="simple">
+<li><p><strong>playerObject (LINK)</strong>: An instance of <a class="reference internal" href="bf2.html"><span class="doc">bf2.PlayerManager.Player</span></a></p></li>
+<li><p><strong>playerID (LINK)</strong>: As players connect to the server they are assigned playerID numbers from “1” up.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">squadID</span></code>: Squads for each side are independently numbered beginning at “1” and increasing thereafter. Players not on a squad, including team commanders, are assigned to squad “0”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">teamID</span></code>: “0” for US, “1” for China or MEC</p></li>
+</ul>
+<div class="section" id="server-events">
+<h3>Server Events<a class="headerlink" href="#server-events" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ServerReady</span></code></p>
+<p>TBD</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BeginRound</span></code></p>
+<p>TBD</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EndRound</span></code></p>
+<p>TBD</p>
+</li>
+</ul>
+</div>
+<div class="section" id="player-events">
+<h3>Player Events<a class="headerlink" href="#player-events" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerConnect(playerObject)</span></code></p>
+<p>Fires when a player connects to the game.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerSpawn(playerObject,</span> <span class="pre">soldierObject)</span></code></p>
+<p>Occurs when a player spawns, and associates a <code class="docutils literal notranslate"><span class="pre">playerObject</span></code> “spirit” with a <code class="docutils literal notranslate"><span class="pre">soldierObject</span></code> “body”.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerChangeTeams(playerObject,</span> <span class="pre">humanHasSpawned)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">humanHasSpawned</span></code> is 1 if the player the event is firing for is a human (as opposed to an AI). Does not fire due to team change from “setTeam”!</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerChangeWeapon(playerObject,</span> <span class="pre">oldWeaponObject,</span> <span class="pre">newWeaponObject)</span></code></p>
+<p>Player has changed which weapon they are holding.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerChangedSquad(playerObject,</span> <span class="pre">oldSquadID,</span> <span class="pre">newSquadID)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">SquadID</span></code> is 0 for players who are not members of any squad (including the team commander).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerScore(playerObject,</span> <span class="pre">difference)</span></code></p>
+<p>Difference is change to player’s score (positive or negative).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerHealPoint(givingPlayerObject,</span> <span class="pre">receivingSoldierObject)</span></code></p>
+<p>Occurs whenever a player heals another player; there is no indication of how much health was restored.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerRepairPoint(givingPlayerObject,</span> <span class="pre">receivingVehicleObject)</span></code></p>
+<p>Occurs whenever a player repairs a vehicle; there is no indication of how much damage was repaired.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerGiveAmmoPoint(givingPlayerObject,</span> <span class="pre">receivingPhysicalObject)</span></code></p>
+<p>Occurs whenever a player replenishes the ammo in another player or vehicle. There is no indication of how much ammo was replenished.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerTeamDamagePoint(playerObject,</span> <span class="pre">victimSoldierObject)</span></code></p>
+<p>Occurs whenever a player damages another player on their own team. There is no indication of how much damage was done.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerKilled(victimPlayerObject,</span> <span class="pre">attackerPlayerObject,</span> <span class="pre">weaponObject,</span> <span class="pre">assists,</span> <span class="pre">victimSoldierObject)</span></code></p>
+<p>This event occurs when a player is “critically injured”, but still capable of being revived. If any players assisted in the kill, then “assists” will be a tuple of tuples: the top-level tuple will contain one lower-level tuple for each assisting player; the lower-level tuples will each have two elements: a <code class="docutils literal notranslate"><span class="pre">playerObject</span></code> for one of the assisting players, and a number indicating the type of assist (1=targeting assist, 2=kill damage assist, 3=driver assist).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerRevived(revivedPlayerObject,</span> <span class="pre">medicPlayerObject)</span></code></p>
+<p>Player has been revived from a “critically injured” condition to full health by a medic using “shock paddles”. Players can only be revived in the interval between a <code class="docutils literal notranslate"><span class="pre">PlayerKilled</span></code> event and a subsequent <code class="docutils literal notranslate"><span class="pre">PlayerDeath</span></code> event.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerDeath(playerObject,</span> <span class="pre">soldierObject)</span></code></p>
+<p>This event occurs when a player is decisively dead, and cannot be revived; they will only return to the game by respawning. <code class="docutils literal notranslate"><span class="pre">soldierObject</span></code> is the soldier “body” (which is now discarded) for the <code class="docutils literal notranslate"><span class="pre">playerObject</span></code> “spirit” (which will persist through the next spawn).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerBanned(playerObject,</span> <span class="pre">time,</span> <span class="pre">type)</span></code></p>
+<p>TBD</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerKicked(playerObject)</span></code></p>
+<p>Player has been kicked off the server.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerDisconnect(playerObject)</span></code></p>
+<p>Player has disconnected from the server.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="vehicle-and-kit-events">
+<h3>Vehicle and Kit Events<a class="headerlink" href="#vehicle-and-kit-events" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">EnterVehicle(playerObject,</span> <span class="pre">vehicleObject[,</span> <span class="pre">freeSoldier])</span></code></p>
+<p>Player represented by <code class="docutils literal notranslate"><span class="pre">playerObject</span></code> has entered the vehicle represented by <code class="docutils literal notranslate"><span class="pre">vehicleObject</span></code>. <code class="docutils literal notranslate"><span class="pre">freeSoldier</span></code> is 1 if the player is a passenger of the vehicle and is able to use weapons/objects of his kit. i.e. seat 4(+) of a black hawk.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExitVehicle(playerObject,</span> <span class="pre">vehicleObject)</span></code></p>
+<p>Player has exited a vehicle.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VehicleDestroyed(vehicleObject,</span> <span class="pre">attackerObject)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">vehicleObject</span></code> has been destroyed by <code class="docutils literal notranslate"><span class="pre">attackerObject</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PickupKit(playerObject,</span> <span class="pre">kitObject)</span></code></p>
+<p>Player has picked up a kit. This occurs both when a player physically picks up a kit, as well as when a player spawns.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DropKit(playerObject,</span> <span class="pre">kitObject)</span></code></p>
+<p>Player has dropped a kit; can occur either because a player has died, or because a player has picked up a different kit.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="team-events">
+<h3>Team Events<a class="headerlink" href="#team-events" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Reset(data)</span></code></p>
+<p>TBD</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChangedCommander(teamID,</span> <span class="pre">oldCommanderPlayerObject,</span> <span class="pre">newCommanderPlayerObject)</span></code></p>
+<p>Occurs when a team changes commanders; the old or new commander may be “None”.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChangedSquadLeader(squadID,</span> <span class="pre">oldLeaderPlayerObject,</span> <span class="pre">newLeaderPlayerObject)</span></code></p>
+<p>Occurs when a squad changes squad leaders; the old or new squad leader may be “None”.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="game-events">
+<h3>Game Events<a class="headerlink" href="#game-events" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ControlPointChangedOwner(controlPointObject,</span> <span class="pre">attackingTeamID)</span></code></p>
+<p>TBD</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TimeLimitReached(value)</span></code></p>
+<p>Event fires when the fixed time limit for a round expires (not sure what “value” is)</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TicketLimitReached(team,</span> <span class="pre">limitID)</span></code></p>
+<p>TBD</p>
+</li>
+</ul>
+</div>
+<div class="section" id="command-events">
+<h3>Command Events<a class="headerlink" href="#command-events" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ConsoleSendCommand(command,</span> <span class="pre">args)</span></code></p>
+<p>This event is triggered by someone using the <code class="docutils literal notranslate"><span class="pre">pythonHost.sendCommand</span></code> console command. Unfortunately, this command/event mechanism appears to be disabled in non-ranked servers. (As a workaround, you can achieve a similar effect by [[Cookbook:Adding New RCon Commands|creating and registering your own custom RCon commands]]).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RemoteCommand(playerId,</span> <span class="pre">cmd)</span></code></p>
+<p>Event fires when a game client gives an <code class="docutils literal notranslate"><span class="pre">RCon</span></code> (remote console) command. <code class="docutils literal notranslate"><span class="pre">cmd</span></code> is the command the player gave. This event is used by the admin module to receive and process <code class="docutils literal notranslate"><span class="pre">RCon</span></code> commands from players; <code class="docutils literal notranslate"><span class="pre">RCon</span></code> commands from TCP connections are received by the admin module directly, and do not fire this event.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ClientCommand(command,</span> <span class="pre">issuerPlayerObject,</span> <span class="pre">args)</span></code></p>
+<p>This event occurs when a game client issues certain in-game commands. The only such commands identified so far are: command=100 means player wants to punish teammate for teamkill; command=101 means player wants to forgive. In both cases, args=1. This response is generated by the player responding to an on-screen prompt caused by a call to the <code class="docutils literal notranslate"><span class="pre">bf2.gameLogic.sendClientCommand</span></code> method.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="misc-events">
+<h3>Misc. Events<a class="headerlink" href="#misc-events" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerUnlocksResponse(succeeded,</span> <span class="pre">player,</span> <span class="pre">unlocks)</span></code></p>
+<p>Unlocks are requested and received asynchronously. This event is triggered when the response for player (which is an object of type Player) are received. If the ranking server did not successfully find the player in question, <code class="docutils literal notranslate"><span class="pre">succeeded</span></code> is set to false, else true. unlocks is a list of kit ids, which are 11, 22, 33 .. 77.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerAwardsResponse</span></code></p>
+<p>TBD</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChatMessage(playerId,</span> <span class="pre">text,</span> <span class="pre">channel,</span> <span class="pre">flags)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">channel</span></code> is <code class="docutils literal notranslate"><span class="pre">Squad</span></code>, <code class="docutils literal notranslate"><span class="pre">Team</span></code>, <code class="docutils literal notranslate"><span class="pre">Global</span></code>, <code class="docutils literal notranslate"><span class="pre">ServerTeamMessage</span></code> or <code class="docutils literal notranslate"><span class="pre">ServerMessage</span></code>. Text is the text of the message sent, prefixed by <code class="docutils literal notranslate"><span class="pre">HUD_TEXT_CHAT_TEAM</span></code> or <code class="docutils literal notranslate"><span class="pre">HUD_TEXT_CHAT_SQUAD</span></code> if the message is sent to the Team or Squad channel; there is no prefix if it is sent to the Global channel. <code class="docutils literal notranslate"><span class="pre">playerId</span></code> is -1 for all server messages. If the player sending the message is dead, their message is also prefixed by <code class="docutils literal notranslate"><span class="pre">HUD_CHAT_DEADPREFIX</span></code>. (Strings such as <code class="docutils literal notranslate"><span class="pre">HUD_TEXT_CHAT_TEAM</span></code>, <code class="docutils literal notranslate"><span class="pre">HUD_CHAT_DEADPREFIX</span></code>, and so on, are used as keys by the game engine to match and replace with localized text.)</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerStatsResponse(succeeded,</span> <span class="pre">player,</span> <span class="pre">response)</span></code></p>
+<p>TBD</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Update(data)</span></code></p>
+<p>TBD</p>
+</li>
+</ul>
+</div>
+<div class="section" id="non-standard-events">
+<h3>Non-Standard Events<a class="headerlink" href="#non-standard-events" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">GameStatusChangedEvent(status)</span></code></p>
+<p>This type of event is registered for with host.<code class="docutils literal notranslate"><span class="pre">registerGameStatusHandler</span></code>. <code class="docutils literal notranslate"><span class="pre">status</span></code> is an integer status code enumerated by <a class="reference internal" href="bf2.html"><span class="doc">bf2.GameStatus</span></a>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TriggerEvent(triggerID,</span> <span class="pre">object,</span> <span class="pre">vehicle,</span> <span class="pre">enter,</span> <span class="pre">userData)</span></code></p>
+<p>This type of event is registered for with <code class="docutils literal notranslate"><span class="pre">bf2.triggerManager.createHemiSphericalTrigger</span></code> or <code class="docutils literal notranslate"><span class="pre">bf2.triggerManager.createRadiusTrigger</span></code>; trigger <code class="docutils literal notranslate"><span class="pre">triggerID</span></code> is activated when <code class="docutils literal notranslate"><span class="pre">vehicle</span></code> comes within the preset radius of <code class="docutils literal notranslate"><span class="pre">object</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TimerEvent(data)</span></code></p>
+<p>This type of event fires when a timer established with <a class="reference internal" href="bf2.html"><span class="doc">bf2.Timer</span></a> expires. “data” is an optional piece of information (of any type) that can be set when the timer is established.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="mysterious-events">
+<h2>Mysterious Events<a class="headerlink" href="#mysterious-events" title="Permalink to this headline">¶</a></h2>
+<p>These strings were found in the server executable, and appear to be internal game engine events. They seem to not be accessible from Python, except in a few cases, where there is a correspondence between these “events” and Python events (e.g. “BeginRoundEvent” may be the same as “BeginRound”). For more information, see [[BF2_Internals#GameEvent|BF2 Internals]].</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RemoveSpawnGroupEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreateSpawnGroupEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ContentCheckEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UAVEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MissileInitEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UnlockEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MedalEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ToggleFreeCameraEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VoipSessionEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PythonCommandEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EndOfRoundEvent</span></code> → <code class="docutils literal notranslate"><span class="pre">EndRound</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BeginRoundEvent</span></code> → <code class="docutils literal notranslate"><span class="pre">BeginRound</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TargetDirectionEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VoteEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VoipPlayerMuteEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SupplyDropEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CommanderCamEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VoipOnOffEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AmbientEffectAreaEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StickyProjectileEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ArtilleryEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SpottedEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SetSquadLeaderEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SetAcceptOrderEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KickBanEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RankEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InviteEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IssueSquadOrderEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SetPrivateSquadEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChangeSquadNameEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KilledByEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RadioMessageEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CommanderEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LeaveSquadEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JoinSquadEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StringBlockEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HandleDropEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HandlePickupEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChangePlayerNameEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PostRemoteEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExitVehicleEvent</span></code> → <code class="docutils literal notranslate"><span class="pre">ExitVehicle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EnterVehicleEvent</span></code> → <code class="docutils literal notranslate"><span class="pre">EnterVehicle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DestroyPlayerEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DestroyObjectEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreateKitEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreateObjectEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreatePlayerEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DataBlockEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ConnectionTypeEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChallengeResponseEvent</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChallengeEvent</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="event-patterns">
+<h2>Event Patterns<a class="headerlink" href="#event-patterns" title="Permalink to this headline">¶</a></h2>
+<p>While each event documented here corresponds to a discrete change of game state, there are certain actions that happen in the game that cause a fixed sequence of events to happen every time-a PlayerSpawn event, for example, is always followed by a PlayerChangeWeapon event and a PickupKit event. This section documents some of these recurring patterns.</p>
+<div class="section" id="player-spawn">
+<h3>Player Spawn<a class="headerlink" href="#player-spawn" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerConnect</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerSpawn</span></code></p>
+<p>Player becomes associated with a <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerChangeWeapon</span></code></p>
+<p>From <code class="docutils literal notranslate"><span class="pre">None</span></code> to a <code class="docutils literal notranslate"><span class="pre">WeaponObject</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PickupKit</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="player-killed">
+<h3>Player Killed<a class="headerlink" href="#player-killed" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerKilled</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerScore</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DropKit</span></code></p>
+<p>The victim drops their kit.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExitVehicle</span></code></p>
+<p>If player is inside a vehicle.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerDeath</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="player-revived">
+<h3>Player Revived<a class="headerlink" href="#player-revived" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerKilled</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerScore</span></code></p>
+<p>For attacker.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DropKit</span></code></p>
+<p>Victim drops their kit.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerRevived</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PickupKit</span></code></p>
+<p>Revived player picks up the nearest kit [hopefully, but not necessarily, their old one]; if there is no kit nearby, they default to picking up an “assault” kit.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerScore</span></code></p>
+<p>For medic who did the revive.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="flag-change">
+<h3>Flag Change<a class="headerlink" href="#flag-change" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">ControlPointChangedOwner</span></code></p>
+<p>When neutralized.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerScoreEvent</span></code></p>
+<p>Score for having neutralized flag, repeated for each attacker in CP radius.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ControlPointChangedOwner</span></code></p>
+<p>When capture complete.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerScoreEvent</span></code></p>
+<p>Score for having completed capture, repeated for each attacker in CP radius.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="player-kicked">
+<h3>Player Kicked<a class="headerlink" href="#player-kicked" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerKicked</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DropKit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerDeath</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerDisconnect</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="player-banned">
+<h3>Player Banned<a class="headerlink" href="#player-banned" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerBanned</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerKicked</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DropKit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerDeath</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlayerDisconnect</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="overall-game-state-change">
+<h3>Overall Game State Change<a class="headerlink" href="#overall-game-state-change" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">StatusChange</span></code></p>
+<p>To <code class="docutils literal notranslate"><span class="pre">PreGame</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Reset</span></code></p>
+<p>This event doesn’t happen in the first round after a server starts.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StatusChange</span></code></p>
+<p>To <code class="docutils literal notranslate"><span class="pre">Playing</span></code>; stay here until enough players connect.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StatusChange</span></code></p>
+<p>To <code class="docutils literal notranslate"><span class="pre">PreGame</span></code>, once enough players have connected.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Reset</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StatusChange</span></code></p>
+<p>To <code class="docutils literal notranslate"><span class="pre">Playing</span></code>-the real game round now begins.</p>
+</li>
+<li><p>Play game, beginning with players spawning in.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StatusChange</span></code></p>
+<p>To <code class="docutils literal notranslate"><span class="pre">EndGame</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DropKit</span></code></p>
+<p>For each player still in game at end.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">RealityDocs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Technical Information</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../engine/index.html">Battlefield Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modding/index.html">Modding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Battlefield Python</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">References</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Events</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#types-of-events">Types of Events</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#standard-events">Standard Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#game-status-events">Game Status Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#trigger-events">Trigger Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#timer-events">Timer Events</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#descriptions-of-events">Descriptions of Events</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#server-events">Server Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#player-events">Player Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#vehicle-and-kit-events">Vehicle and Kit Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#team-events">Team Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#game-events">Game Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#command-events">Command Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#misc-events">Misc. Events</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#non-standard-events">Non-Standard Events</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#mysterious-events">Mysterious Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#event-patterns">Event Patterns</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#player-spawn">Player Spawn</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#player-killed">Player Killed</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#player-revived">Player Revived</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#flag-change">Flag Change</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#player-kicked">Player Kicked</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#player-banned">Player Banned</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#overall-game-state-change">Overall Game State Change</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="bf2.html">bf2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="host.html">host</a></li>
+<li class="toctree-l3"><a class="reference internal" href="objects.html">BF2 Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../bigpicture.html">How Battlefield 2 Hooks Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debugging.html">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../learning.html">Learning Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../realitylogger.html">Reality Logger</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Battlefield Python</a><ul>
+  <li><a href="index.html">References</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">References</a></li>
+      <li>Next: <a href="bf2.html" title="next chapter">bf2</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, The Project Reality Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/python/reference/events.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
