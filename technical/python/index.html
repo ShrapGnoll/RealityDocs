@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="References" href="reference/index.html" /><link rel="prev" title="The RCon Protocol" href="../networking/protocols_rcon.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="How Battlefield 2 Hooks Python" href="bigpicture.html" /><link rel="prev" title="The RCon Protocol" href="../networking/protocols_rcon.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
         <title>Battlefield Python - RealityDocs documentation</title>
@@ -180,6 +180,10 @@
 </ul>
 </li>
 <li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">Battlefield Python</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Battlefield Python</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="bigpicture.html">How Battlefield 2 Hooks Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debugging.html">Debugging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="learning.html">Learning Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="realitylogger.html">Reality Logger</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="reference/index.html">References</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of References</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="reference/events.html">Events</a></li>
 <li class="toctree-l4"><a class="reference internal" href="reference/bf2.html">bf2</a></li>
@@ -187,10 +191,6 @@
 <li class="toctree-l4"><a class="reference internal" href="reference/objects.html">BF2 Objects</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="bigpicture.html">How Battlefield 2 Hooks Python</a></li>
-<li class="toctree-l3"><a class="reference internal" href="debugging.html">Debugging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="learning.html">Learning Python</a></li>
-<li class="toctree-l3"><a class="reference internal" href="realitylogger.html">Reality Logger</a></li>
 </ul>
 </li>
 </ul>
@@ -233,6 +233,25 @@
 <h1>Battlefield Python<a class="headerlink" href="#battlefield-python" title="Permalink to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="bigpicture.html">How Battlefield 2 Hooks Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#important-consideration">Important Consideration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html#note">Note</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Learning Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#python-language-resources">Python Language Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#python-cookbooks-idioms-and-design-patterns">Python cookbooks, idioms, and design patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#some-good-printed-books-on-python">Some good printed books on Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#downloading-python">Downloading Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#python-ides">Python IDEs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="realitylogger.html">Reality Logger</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="realitylogger.html#creating-a-logger">Creating a logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="realitylogger.html#using-a-logger">Using a logger</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="reference/index.html">References</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="reference/events.html">Events</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="reference/events.html#types-of-events">Types of Events</a><ul>
@@ -330,25 +349,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="bigpicture.html">How Battlefield 2 Hooks Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="debugging.html#important-consideration">Important Consideration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="debugging.html#note">Note</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="learning.html">Learning Python</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="learning.html#python-language-resources">Python Language Resources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="learning.html#python-cookbooks-idioms-and-design-patterns">Python cookbooks, idioms, and design patterns</a></li>
-<li class="toctree-l2"><a class="reference internal" href="learning.html#some-good-printed-books-on-python">Some good printed books on Python</a></li>
-<li class="toctree-l2"><a class="reference internal" href="learning.html#downloading-python">Downloading Python</a></li>
-<li class="toctree-l2"><a class="reference internal" href="learning.html#python-ides">Python IDEs</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="realitylogger.html">Reality Logger</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="realitylogger.html#creating-a-logger">Creating a logger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="realitylogger.html#using-a-logger">Using a logger</a></li>
-</ul>
-</li>
 </ul>
 </div>
 </section>
@@ -358,12 +358,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="reference/index.html">
+          <a class="next-page" href="bigpicture.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">References</div>
+                <div class="title">How Battlefield 2 Hooks Python</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
