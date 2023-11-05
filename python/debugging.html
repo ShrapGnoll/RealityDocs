@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Debugging &#8212; RealityDocs  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=cb25574f" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Learning Python" href="learning.html" />
@@ -32,8 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="debugging">
-<h1>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h1>
+  <section id="debugging">
+<h1>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">¶</a></h1>
 <p>The BF2 engine has some debugging features, one of which is a log file that it can produce during the course of a game that records various pieces of information that would be useful in debugging. This BF2 engine log file can be written to from Python programs by using the <code class="docutils literal notranslate"><span class="pre">host.log(msg)</span></code> method. Unfortunately, no one seems to know how to turn this logging on right now–maybe it’s a command-line option? It’s even possible that the debugging features were stripped out of the retail version of the BF2 server, and so the log may be non-existent.</p>
 <p>The core DICE Python code includes a Python debugging feature that sends it’s output to the BF2 engine log file via <code class="docutils literal notranslate"><span class="pre">host.log</span></code>. It does this by redefining the stdout (standard output) and stderr (standard error message) I/O streams so that instead of going to the console (which is basically non-existent for the embedded Python interpreter), they are routed to <code class="docutils literal notranslate"><span class="pre">host.log</span></code>, where they will be recorded along with any log information from the BF2 engine. Once this redefinition is done, a simple Python <code class="docutils literal notranslate"><span class="pre">print</span></code> statement will send its output to the log file.</p>
 <p>The classes used to accomplish this output redirection are defined in <code class="docutils literal notranslate"><span class="pre">bf2._init_</span></code>, but the actual redirection itself doesn’t happen until the BF2 engine calls the <code class="docutils literal notranslate"><span class="pre">bf2.init_module()</span></code>… so any <code class="docutils literal notranslate"><span class="pre">print</span></code> statements executed before this will go nowhere.</p>
@@ -51,16 +50,16 @@
 </div>
 <p>(The <code class="docutils literal notranslate"><span class="pre">'a'</span></code> means that Python should “append” output to the end of the log file, as opposed to erasing it first). This change will cause anything every error message and the output of every <code class="docutils literal notranslate"><span class="pre">print</span></code> statement to be routed to the file <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server/mylogfile.log</span></code>.</p>
 <p>You can now use <code class="docutils literal notranslate"><span class="pre">print</span></code> statements in your own Python code as a way of getting feedback about what’s going on in your programming.</p>
-<div class="section" id="important-consideration">
-<h2>Important Consideration<a class="headerlink" href="#important-consideration" title="Permalink to this headline">¶</a></h2>
+<section id="important-consideration">
+<h2>Important Consideration<a class="headerlink" href="#important-consideration" title="Permalink to this heading">¶</a></h2>
 <p>Because of the way your operating system buffers I/O, you may not see anything in your log file until the <code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr</span></code> streams are closed or until the operating system’s internal buffer is full–which may not happen for quite a while… and maybe not until the server is shut down–and even then, your output may vanish completely if the server isn’t shutdown in an orderly way.</p>
 <p>For example, if you are using the server GUI tool available from EA and you push the “Stop” button when the server is running, the server will shutdown abruptly without flushing it’s buffers–and you’ll find nothing in your log file. To shut the server down gracefully, type the “quit” command into the server’s window directly. If you’ve sent some particularly important information to the log file and you want to insure it gets there, you can use the <code class="docutils literal notranslate"><span class="pre">sys.stdout.flush()</span></code> method.</p>
-</div>
-<div class="section" id="note">
-<h2>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="note">
+<h2>Note<a class="headerlink" href="#note" title="Permalink to this heading">¶</a></h2>
 <p>You can use <code class="docutils literal notranslate"><span class="pre">host.rcon_invoke('echo</span> <span class="pre">&quot;...&quot;')</span></code> to print things directly to the server console.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -79,7 +78,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Technical Information</span></p>
+<p class="caption" role="heading"><span class="caption-text">Technical Information</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../engine/index.html">Battlefield Engine</a></li>
@@ -114,12 +113,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -136,7 +135,7 @@
       &copy;2023, The Project Reality Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

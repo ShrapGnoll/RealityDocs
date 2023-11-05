@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>How Battlefield 2 Hooks Python &#8212; RealityDocs  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=cb25574f" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Debugging" href="debugging.html" />
@@ -32,8 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="how-battlefield-2-hooks-python">
-<h1>How Battlefield 2 Hooks Python<a class="headerlink" href="#how-battlefield-2-hooks-python" title="Permalink to this headline">¶</a></h1>
+  <section id="how-battlefield-2-hooks-python">
+<h1>How Battlefield 2 Hooks Python<a class="headerlink" href="#how-battlefield-2-hooks-python" title="Permalink to this heading">¶</a></h1>
 <p>Here’s a description of how the BF2 engine interacts with Python code:</p>
 <ol class="arabic simple">
 <li><p>When BF2 engine starts up it fires up its embedded Python interpreter, with it’s sys.path set to include</p>
@@ -64,7 +63,7 @@
 <li><p>The game engine now jumps back a few steps in this process, to the point where game status changes to “<code class="docutils literal notranslate"><span class="pre">PreGame</span></code>”, and pre-game initialization callback handlers are called to begin the cycle again.</p></li>
 </ol>
 <p>Note that there is another directory of Python code in the <code class="docutils literal notranslate"><span class="pre">Battlefield</span> <span class="pre">2</span> <span class="pre">Server</span></code> directory that does <strong>not</strong> get pulled in by the game engine: <code class="docutils literal notranslate"><span class="pre">adminutils</span></code> contains source code and executables for the <code class="docutils literal notranslate"><span class="pre">rotate_demo</span></code> and <code class="docutils literal notranslate"><span class="pre">remoteconsole</span></code> stand-alone applications, as examples of how to write software that will interact with BF2. The fact that these are written in Python is coincidental. (The BF2 engine handles <code class="docutils literal notranslate"><span class="pre">RCon</span></code> and demo recording functionality internally, without using the embedded Python interpreter, although there are events connected with these functions that can be used to hook your own Python code to them).</p>
-</div>
+</section>
 
 
           </div>
@@ -83,7 +82,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Technical Information</span></p>
+<p class="caption" role="heading"><span class="caption-text">Technical Information</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../engine/index.html">Battlefield Engine</a></li>
@@ -114,12 +113,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -136,7 +135,7 @@
       &copy;2023, The Project Reality Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>BF2 Coordinates &#8212; RealityDocs  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=cb25574f" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="BF2 Engine Internals" href="internals.html" />
@@ -32,8 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="bf2-coordinates">
-<h1>BF2 Coordinates<a class="headerlink" href="#bf2-coordinates" title="Permalink to this headline">¶</a></h1>
+  <section id="bf2-coordinates">
+<h1>BF2 Coordinates<a class="headerlink" href="#bf2-coordinates" title="Permalink to this heading">¶</a></h1>
 <p>Battlefield 2 uses basic a basic 3-dimensional coordinate system to specify the position and orientation of objects within the game world.</p>
 <p>Note that only objects of the <a class="reference internal" href="../python/reference/objects.html#physicalobject"><span class="std std-ref">PhysicalObject</span></a> class and classes that inherit from it (<a class="reference internal" href="../python/reference/objects.html#soldierobject"><span class="std std-ref">SoldierObject</span></a>, <a class="reference internal" href="../python/reference/objects.html#controlpointobject"><span class="std std-ref">ControlPointObject</span></a>, and so on) that “exist” in the game world and posssess positons and orientations. So, for example, instances of <a class="reference internal" href="../python/reference/bf2.html#bf2-playermanager-player"><span class="std std-ref">bf2.PlayerManager.Player</span></a> do <strong>not</strong> have positions or orientations.</p>
 <p>So, to retrieve position and orientation for a vehicle (say, an Abrams tank), representated by the <a class="reference internal" href="../python/reference/objects.html#vehicleobject"><span class="std std-ref">VehicleObject</span></a> <code class="docutils literal notranslate"><span class="pre">tank</span></code>:</p>
@@ -48,8 +47,8 @@
 <span class="n">rotation</span> <span class="o">=</span> <span class="n">andreasSoldier</span><span class="o">.</span><span class="n">getRotation</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="section" id="position">
-<h2>Position<a class="headerlink" href="#position" title="Permalink to this headline">¶</a></h2>
+<section id="position">
+<h2>Position<a class="headerlink" href="#position" title="Permalink to this heading">¶</a></h2>
 <p>Coordinates are specified by a three-element tuple, <code class="docutils literal notranslate"><span class="pre">(X,</span> <span class="pre">Y,</span> <span class="pre">Z)</span></code>. For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">160.95599365234375</span><span class="p">,</span> <span class="mf">162.54800415039062</span><span class="p">,</span> <span class="o">-</span><span class="mf">266.01699829101562</span><span class="p">)</span>
 </pre></div>
@@ -71,7 +70,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="kn">import</span> <span class="nn">math</span>
 
    <span class="k">def</span> <span class="nf">findDistance</span><span class="p">(</span><span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">):</span>
-      <span class="sd">&#39;&#39;&#39;Use Pythagorean Theorem to find distance between two sets of coordinates.</span>
+<span class="w">      </span><span class="sd">&#39;&#39;&#39;Use Pythagorean Theorem to find distance between two sets of coordinates.</span>
 <span class="sd">      With normal BF2 scaling, the resulting distance will be in meters.&#39;&#39;&#39;</span>
       <span class="n">deltaX</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">point2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
       <span class="n">deltaY</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">point2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -85,9 +84,9 @@
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="rotation">
-<h2>Rotation<a class="headerlink" href="#rotation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="rotation">
+<h2>Rotation<a class="headerlink" href="#rotation" title="Permalink to this heading">¶</a></h2>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">Rotational orientation (attitude) is specified by another three-element tuple, (A, P, R)</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">166.29025268554687</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
@@ -121,12 +120,12 @@
 </ul>
 </li>
 </ul>
-<div class="section" id="note">
-<h3>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h3>
+<section id="note">
+<h3>Note<a class="headerlink" href="#note" title="Permalink to this heading">¶</a></h3>
 <p>Note: The pitch and roll rotational coordinates apply to aircraft and cameras in BF2, but do <strong>not</strong> apply to players or vehicles on the ground. Ground players and vehicles <strong>always</strong> show <code class="docutils literal notranslate"><span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">R</span></code> to be 0, regardless of their actual attitude (a soldier looking straight up in the air will still have a <code class="docutils literal notranslate"><span class="pre">P</span></code> value of 0, for example).</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -145,7 +144,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Technical Information</span></p>
+<p class="caption" role="heading"><span class="caption-text">Technical Information</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Battlefield Engine</a><ul class="current">
@@ -181,12 +180,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -203,7 +202,7 @@
       &copy;2023, The Project Reality Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

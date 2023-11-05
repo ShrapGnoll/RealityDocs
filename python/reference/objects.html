@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>BF2 Objects &#8212; RealityDocs  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=cb25574f" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="How Battlefield 2 Hooks Python" href="../bigpicture.html" />
@@ -32,14 +31,14 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="bf2-objects">
-<h1>BF2 Objects<a class="headerlink" href="#bf2-objects" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="physicalobject">
-<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code><a class="headerlink" href="#physicalobject" title="Permalink to this headline">¶</a></h2>
+  <section id="bf2-objects">
+<h1>BF2 Objects<a class="headerlink" href="#bf2-objects" title="Permalink to this heading">¶</a></h1>
+<section id="physicalobject">
+<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code><a class="headerlink" href="#physicalobject" title="Permalink to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code> represent physical things in the BF2 game world; as such, they have the properties of real objects in the physical world: properties like position (X, Y, Z coordinates) and orientation (rotation), and can contain, and be contained by, other <code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code> objects. A <code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code> appears to be implemented as C++ objects in the game engine which the embedded Python engine has access to, but since they are game engine objects, they are not defined anywhere in Python, and cannot be created directly in Python - but they can be accessed from Python. No special imports are necessary to manipulate these objects.</p>
 <p>Please note that since these are not native Python objects, we don’t know what they are actually named inside the game engine; <code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code>, as well as the names of other types of objects that inherit from that class, are made up for convienience. We also can’t see into the game engine code to see if the hierarchial structure of these classes is what is presented here - for example, <code class="docutils literal notranslate"><span class="pre">VehicleObject</span></code> and <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> may, in fact, be a single class; the hierarchy of <code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code>’s decendents given here should nevertheless be equivalent to whatever the real hierarchy is.</p>
-<div class="section" id="methods">
-<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<section id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">physicalObject.isValid()</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">physicalObject.getTemplateProperty()</span></code></p></li>
@@ -64,9 +63,9 @@
 <p>For control points only.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="attributes">
-<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">physicalObject.templateName</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">physicalObject.isControlPoint</span></code></p></li>
@@ -74,25 +73,25 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">physicalObject.hasArmor</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">physicalObject.token</span></code></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="weaponobject">
-<span id="id2"></span><h2><code class="docutils literal notranslate"><span class="pre">WeaponObject</span></code><a class="headerlink" href="#weaponobject" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="weaponobject">
+<span id="id2"></span><h2><code class="docutils literal notranslate"><span class="pre">WeaponObject</span></code><a class="headerlink" href="#weaponobject" title="Permalink to this heading">¶</a></h2>
 <p>A <code class="docutils literal notranslate"><span class="pre">WeaponObject</span></code> is used to represent a weapon in BF2. The <code class="docutils literal notranslate"><span class="pre">WeaponObject</span></code> class inherits the methods and attributes of <code class="docutils literal notranslate"><span class="pre">physicalObject</span></code>, with no additonal methods or attributes.</p>
-</div>
-<div class="section" id="kitobject">
-<span id="id3"></span><h2><code class="docutils literal notranslate"><span class="pre">KitObject</span></code><a class="headerlink" href="#kitobject" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="kitobject">
+<span id="id3"></span><h2><code class="docutils literal notranslate"><span class="pre">KitObject</span></code><a class="headerlink" href="#kitobject" title="Permalink to this heading">¶</a></h2>
 <p>A <code class="docutils literal notranslate"><span class="pre">KitObject</span></code> is used to represent a “kit” in BF2. The <code class="docutils literal notranslate"><span class="pre">KitObject</span></code> class inherits the methods and attributes of <code class="docutils literal notranslate"><span class="pre">physicalObject</span></code>, with no additonal methods or attributes.</p>
-</div>
-<div class="section" id="controlpointobject">
-<span id="id4"></span><h2><code class="docutils literal notranslate"><span class="pre">ControlPointObject</span></code><a class="headerlink" href="#controlpointobject" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="controlpointobject">
+<span id="id4"></span><h2><code class="docutils literal notranslate"><span class="pre">ControlPointObject</span></code><a class="headerlink" href="#controlpointobject" title="Permalink to this heading">¶</a></h2>
 <p>A <code class="docutils literal notranslate"><span class="pre">ControlPointObject</span></code> is used to represent a control point in BF2. The <code class="docutils literal notranslate"><span class="pre">ControlPointObject</span></code> class inherits the methods and attributes of <code class="docutils literal notranslate"><span class="pre">physicalObject</span></code>, with the following additional methods and attributes:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">ControlPointObject.cp_getParam('parameter')</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ControlPointObject.cp_setParam('parameter',</span> <span class="pre">value)</span></code></p></li>
 </ul>
-<div class="section" id="id5">
-<h3>Attributes<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<section id="id5">
+<h3>Attributes<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">ControlPointObject.flagPosition</span></code></p>
 <p>Returns:</p>
@@ -105,9 +104,9 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">ControlPointObject.lastAttackingTeam</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ControlPointObject.triggerId</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="internal-properties">
-<h3>Internal Properties<a class="headerlink" href="#internal-properties" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="internal-properties">
+<h3>Internal Properties<a class="headerlink" href="#internal-properties" title="Permalink to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ControlPointObject</span></code> also have a number of internal properties that are accessed through the <code class="docutils literal notranslate"><span class="pre">cp_getParam</span></code> and <code class="docutils literal notranslate"><span class="pre">cp_setParam</span></code> methods:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">isHemisphere</span></code></p>
@@ -144,10 +143,10 @@
 <p><em>Unknown; may set the ``playerID`` of the player that captured this control point first (the first player to arrive, not assisting players?)</em></p>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="vehicleobject">
-<span id="id6"></span><h2><code class="docutils literal notranslate"><span class="pre">VehicleObject</span></code><a class="headerlink" href="#vehicleobject" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="vehicleobject">
+<span id="id6"></span><h2><code class="docutils literal notranslate"><span class="pre">VehicleObject</span></code><a class="headerlink" href="#vehicleobject" title="Permalink to this heading">¶</a></h2>
 <p>A <code class="docutils literal notranslate"><span class="pre">VehicleObject</span></code> represents a BF2 vehicle. The <code class="docutils literal notranslate"><span class="pre">VehicleObject</span></code> class inherits the methods and attributes of PhysicalObject, with several additional methods. <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code>, used to represent the physical body of player, is a sub-class of <code class="docutils literal notranslate"><span class="pre">VehicleObject</span></code>.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">vehicleObject.getDamage()</span></code></p></li>
@@ -161,14 +160,14 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">vehicleObject.getIsRemoteControlled()</span></code></p></li>
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">getDamage()</span></code> and <code class="docutils literal notranslate"><span class="pre">setDamage()</span></code> methods actually read/set the health of the vehicle. Transport helicopters start with 1500, tanks with 1000 and light jeeps with 750. They all explode when the damage reaches 0.</p>
-</div>
-<div class="section" id="soldierobject">
-<span id="id7"></span><h2><code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code><a class="headerlink" href="#soldierobject" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="soldierobject">
+<span id="id7"></span><h2><code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code><a class="headerlink" href="#soldierobject" title="Permalink to this heading">¶</a></h2>
 <p>A <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> represents the physical body of a human or AI player in BF2. The <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> class inherits the methods and attributes of <code class="docutils literal notranslate"><span class="pre">vehicleObject</span></code>, with no additonal methods or attributes. (Note: it appears that within the game engine, <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> and <code class="docutils literal notranslate"><span class="pre">vehicleObject</span></code> may actually be the exact same thing; conceptually, though, it helps to think of <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> as a subclass of <code class="docutils literal notranslate"><span class="pre">vehicleObject</span></code>).</p>
 <p>It is important to pay attention to the destinction between a player’s “physical” body in the game, which is represented by an instance of the <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> class, having position, orientation, health, etc., and the in-game “spirit” of that player, which is represented by an instance of the <code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.Player</span></code> class, having properties like a name, squad, profile ID, etc. <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">bf2.PlayerManager.Player</span></code> (“spirit”) is created when a player connects to the server, and persists as long as the server continues running, even across game rounds (and disconnect/reconnects - if the player disconnects and then reconnects, the server tries to match them up with an existing <code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.Player</span></code> object). By contrast, a player remains associated with a <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> only as long as they remain alive; as soon as they die, their association with the <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> is broken; when they respawn, a new <code class="docutils literal notranslate"><span class="pre">SoldierObject</span></code> instance is created, and becomes associated with the player. That is to say, between dying and respawning, the player’s “spirit” leaves their first “body” and is “reincarnated” in a new “body”.</p>
 <p>Is that metaphysical enough for you?</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -187,7 +186,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Technical Information</span></p>
+<p class="caption" role="heading"><span class="caption-text">Technical Information</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../engine/index.html">Battlefield Engine</a></li>
@@ -242,12 +241,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -264,7 +263,7 @@
       &copy;2023, The Project Reality Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

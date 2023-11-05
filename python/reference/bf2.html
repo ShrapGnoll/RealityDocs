@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>bf2 &#8212; RealityDocs  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=cb25574f" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="host" href="host.html" />
@@ -32,10 +31,10 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="bf2">
-<h1>bf2<a class="headerlink" href="#bf2" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="bf2-gamestatus">
-<h2><code class="docutils literal notranslate"><span class="pre">bf2.GameStatus</span></code><a class="headerlink" href="#bf2-gamestatus" title="Permalink to this headline">¶</a></h2>
+  <section id="bf2">
+<h1>bf2<a class="headerlink" href="#bf2" title="Permalink to this heading">¶</a></h1>
+<section id="bf2-gamestatus">
+<h2><code class="docutils literal notranslate"><span class="pre">bf2.GameStatus</span></code><a class="headerlink" href="#bf2-gamestatus" title="Permalink to this heading">¶</a></h2>
 <p>Just used as a container for the constant values returned by callbacks from the <code class="docutils literal notranslate"><span class="pre">GameStatusChanged</span></code> event:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">bf2.GameStatus.Playing</span></code></p></li>
@@ -46,9 +45,9 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">bf2.GameStatus.NotConnected</span></code></p></li>
 </ul>
 <p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bf2</span></code> to access these class attributes.</p>
-</div>
-<div class="section" id="bf2-gamelogic-gamelogic">
-<h2><code class="docutils literal notranslate"><span class="pre">bf2.GameLogic.GameLogic</span></code><a class="headerlink" href="#bf2-gamelogic-gamelogic" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="bf2-gamelogic-gamelogic">
+<h2><code class="docutils literal notranslate"><span class="pre">bf2.GameLogic.GameLogic</span></code><a class="headerlink" href="#bf2-gamelogic-gamelogic" title="Permalink to this heading">¶</a></h2>
 <p>A wrapper around lots of BF2 engine stuff accessible through host, apparently to make it more Pythonic. During its initialization the bf2 class instantiates this class as the singleton object <code class="docutils literal notranslate"><span class="pre">bf2.gameLogic</span></code>.</p>
 <p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bf2</span></code> to access the methods and attributes of this object.</p>
 <p>Methods for the singleton object:</p>
@@ -99,9 +98,9 @@
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">bf2.gameLogic.setTeamVehicleDamagePointLimit(value)</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="bf2-gamelogic-serversettings">
-<h2><code class="docutils literal notranslate"><span class="pre">bf2.GameLogic.ServerSettings</span></code><a class="headerlink" href="#bf2-gamelogic-serversettings" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="bf2-gamelogic-serversettings">
+<h2><code class="docutils literal notranslate"><span class="pre">bf2.GameLogic.ServerSettings</span></code><a class="headerlink" href="#bf2-gamelogic-serversettings" title="Permalink to this heading">¶</a></h2>
 <p>Another wrapper around more BF2 engine stuff that’s accessible through host; this class makes it accessing these things cleaner and more Pythonic. During its initialization the bf2 class instantiates this class as the singleton object <code class="docutils literal notranslate"><span class="pre">bf2.serverSettings</span></code>.</p>
 <p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bf2</span></code> to access the methods and attributes of this object.</p>
 <p>Methods for the singleton object:</p>
@@ -121,9 +120,9 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">bf2.serverSettings.getUseGlobalUnlocks()</span></code></p></li>
 </ul>
 <p>You cannot find out server name, port and other similar information this way. Instead, use f.e. <code class="docutils literal notranslate"><span class="pre">host.rcon_invoke('sv.serverName')</span></code> to get the server name.</p>
-</div>
-<div class="section" id="bf2-objectmanager-objectmanager">
-<h2><code class="docutils literal notranslate"><span class="pre">bf2.ObjectManager.ObjectManager</span></code><a class="headerlink" href="#bf2-objectmanager-objectmanager" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="bf2-objectmanager-objectmanager">
+<h2><code class="docutils literal notranslate"><span class="pre">bf2.ObjectManager.ObjectManager</span></code><a class="headerlink" href="#bf2-objectmanager-objectmanager" title="Permalink to this heading">¶</a></h2>
 <p>During its initialization the bf2 class instantiates this class as the singleton object <code class="docutils literal notranslate"><span class="pre">bf2.objectManager</span></code>. This object can be used by Python to get access to internal game engine C++ objects. A list of the available object types can be found [[Game Engine Object Types|here]], and a list of available object templates can be found [[Game Engine Object Templates|here]].</p>
 <p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bf2</span></code> to access the methods and attributes of this object.</p>
 <p>Methods for the singleton object:</p>
@@ -131,9 +130,9 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">bf2.objectManager.getObjectsOfType('object</span> <span class="pre">type')</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">bf2.objectManager.getObjectsOfTemplate('object</span> <span class="pre">template')</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="bf2-playermanager-playerscore">
-<h2><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.PlayerScore</span></code><a class="headerlink" href="#bf2-playermanager-playerscore" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="bf2-playermanager-playerscore">
+<h2><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.PlayerScore</span></code><a class="headerlink" href="#bf2-playermanager-playerscore" title="Permalink to this heading">¶</a></h2>
 <p>Objects of this class maintain a long list of player score attributes. They are used inside of objects of the <code class="docutils literal notranslate"><span class="pre">Player</span></code> class; for any <code class="docutils literal notranslate"><span class="pre">Player</span></code> object x, <code class="docutils literal notranslate"><span class="pre">x.score</span></code> is an object of class <code class="docutils literal notranslate"><span class="pre">PlayerScore</span></code>.</p>
 <p>You will not normally create objects of this class; they are created automatically as part of the <code class="docutils literal notranslate"><span class="pre">Player</span></code> class when <code class="docutils literal notranslate"><span class="pre">Player</span></code> objects are created. No special imports are necessary to access methods and attributes of these objects.</p>
 <p>There is also a separate <code class="docutils literal notranslate"><span class="pre">player.stats</span></code> object, which tracks different information. You can use the following code fragment to see all of the variables in the <code class="docutils literal notranslate"><span class="pre">player.stats</span></code> object.</p>
@@ -141,16 +140,16 @@
    <span class="nb">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="class-methods">
-<h3>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this headline">¶</a></h3>
+<section id="class-methods">
+<h3>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">reset()</span></code></p>
 <p>Resets all score attributes stored within the object itself.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="class-attributes-stored-in-the-playerscore-object">
-<h3>Class attributes stored in the <code class="docutils literal notranslate"><span class="pre">PlayerScore</span></code> object<a class="headerlink" href="#class-attributes-stored-in-the-playerscore-object" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="class-attributes-stored-in-the-playerscore-object">
+<h3>Class attributes stored in the <code class="docutils literal notranslate"><span class="pre">PlayerScore</span></code> object<a class="headerlink" href="#class-attributes-stored-in-the-playerscore-object" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">index</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">heals</span></code></p></li>
@@ -176,9 +175,9 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">skillScore</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cmdScore</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="class-attributes-stored-in-the-bf2-engine">
-<h3>Class attributes stored in the BF2 engine<a class="headerlink" href="#class-attributes-stored-in-the-bf2-engine" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="class-attributes-stored-in-the-bf2-engine">
+<h3>Class attributes stored in the BF2 engine<a class="headerlink" href="#class-attributes-stored-in-the-bf2-engine" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">deaths</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">kills</span></code></p></li>
@@ -205,16 +204,16 @@
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">bulletsGivingDamageAndClear</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="class-attributes-computed-from-other-attribute-values">
-<h3>Class attributes computed from other attribute values<a class="headerlink" href="#class-attributes-computed-from-other-attribute-values" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="class-attributes-computed-from-other-attribute-values">
+<h3>Class attributes computed from other attribute values<a class="headerlink" href="#class-attributes-computed-from-other-attribute-values" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">dkRatio</span></code></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="bf2-playermanager-player">
-<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.Player</span></code><a class="headerlink" href="#bf2-playermanager-player" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="bf2-playermanager-player">
+<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.Player</span></code><a class="headerlink" href="#bf2-playermanager-player" title="Permalink to this heading">¶</a></h2>
 <p>An object of this class is created for each player in the game. When they are initialized, <code class="docutils literal notranslate"><span class="pre">Player</span></code> objects automatically instantiate a <code class="docutils literal notranslate"><span class="pre">PlayerScore</span></code> object and assign it to their score attribute.</p>
 <p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bf2.PlayerManager</span></code> if you wish to create objects of this class; normally, however, you will just access methods and attributes of already existing <code class="docutils literal notranslate"><span class="pre">Player</span></code> objects that are returned to you by other calls, which requires no special import statement.</p>
 <div class="literal-block-wrapper docutils container" id="id5">
@@ -223,8 +222,8 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="class-attributes">
-<h3>Class Attributes<a class="headerlink" href="#class-attributes" title="Permalink to this headline">¶</a></h3>
+<section id="class-attributes">
+<h3>Class Attributes<a class="headerlink" href="#class-attributes" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">index</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">playerID</span></code> for this player.</p>
@@ -233,9 +232,9 @@
 <p>Current score for this player.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="id2">
-<h3>Class Methods<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id2">
+<h3>Class Methods<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">isValid()</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">isRemote()</span></code></p></li>
@@ -296,10 +295,10 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">setIsInsideCP(val)</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">getIsInsideCP()</span></code></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="bf2-playermanager-playermanager">
-<span id="id3"></span><h2><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.PlayerManager</span></code><a class="headerlink" href="#bf2-playermanager-playermanager" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="bf2-playermanager-playermanager">
+<span id="id3"></span><h2><code class="docutils literal notranslate"><span class="pre">bf2.PlayerManager.PlayerManager</span></code><a class="headerlink" href="#bf2-playermanager-playermanager" title="Permalink to this heading">¶</a></h2>
 <p>This class is a wraper around some player management functions in the BF2 engine, and also adds some simple calculations and logic to those functions. During its initialization the bf2 class instantiates this class as the singleton object <code class="docutils literal notranslate"><span class="pre">bf2.playerManager</span></code>.</p>
 <p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bf2</span></code> to access the methods and attributes of this object.</p>
 <p>Methods for the singleton object:</p>
@@ -318,9 +317,9 @@
 <p>Disables PlayerScore events</p>
 </li>
 </ul>
-</div>
-<div class="section" id="bf2-timer">
-<h2><code class="docutils literal notranslate"><span class="pre">bf2.Timer</span></code><a class="headerlink" href="#bf2-timer" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="bf2-timer">
+<h2><code class="docutils literal notranslate"><span class="pre">bf2.Timer</span></code><a class="headerlink" href="#bf2-timer" title="Permalink to this heading">¶</a></h2>
 <p>(Not available in PR, use the <code class="docutils literal notranslate"><span class="pre">realitytimer</span></code> below.)</p>
 <p>Objects in this class are timers that can cause [[Event Reference#Timer Events|timer events]] to be generated when a fixed amount of time has elapsed.</p>
 <div class="literal-block-wrapper docutils container" id="id6">
@@ -331,8 +330,8 @@
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">timerEventHandler</span></code> is the handler to be called when <code class="docutils literal notranslate"><span class="pre">delta</span></code> seconds have elapsed since the creation of the timer; <code class="docutils literal notranslate"><span class="pre">alwaysTrigger</span></code> should be <code class="docutils literal notranslate"><span class="pre">1</span></code> <em>(not sure what the alternative is)</em>. <code class="docutils literal notranslate"><span class="pre">data</span></code> is an optional item (typically a tuple) that will be passed to <code class="docutils literal notranslate"><span class="pre">timerEventHandler</span></code>. (Note that even though <code class="docutils literal notranslate"><span class="pre">data</span></code> is optional when establishing a timer, the timerEventHandler must specify it as a parameter, or the handler won’t work).</p>
 <p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bf2.Timer</span></code> to create timer objects.</p>
-<div class="section" id="id4">
-<h3>Class Methods<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<section id="id4">
+<h3>Class Methods<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">destroy()</span></code></p>
 <p>Destroys the associated game engine timer (but not the Python instance.)</p>
@@ -350,9 +349,9 @@
 <p>For internal use only; calls <code class="docutils literal notranslate"><span class="pre">timerEventHandler</span></code>.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="project-reality-timer-interface">
-<h3>Project Reality Timer interface<a class="headerlink" href="#project-reality-timer-interface" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="project-reality-timer-interface">
+<h3>Project Reality Timer interface<a class="headerlink" href="#project-reality-timer-interface" title="Permalink to this heading">¶</a></h3>
 <p>Project Reality timer (<code class="docutils literal notranslate"><span class="pre">realitytimer.py</span></code>) expands the default interface and adds:</p>
 <ul>
 <li><p>Exception catching with a debug message when an exception is not caught in the handler</p>
@@ -368,10 +367,10 @@
 <p>Also no need to store</p>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="bf2-triggermanager-triggermanager">
-<h2><code class="docutils literal notranslate"><span class="pre">bf2.TriggerManager.TriggerManager</span></code><a class="headerlink" href="#bf2-triggermanager-triggermanager" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="bf2-triggermanager-triggermanager">
+<h2><code class="docutils literal notranslate"><span class="pre">bf2.TriggerManager.TriggerManager</span></code><a class="headerlink" href="#bf2-triggermanager-triggermanager" title="Permalink to this heading">¶</a></h2>
 <p>This class is a wraper around some player management functions in the BF2 engine. During its initialization the bf2 class instantiates this class as the singleton object <code class="docutils literal notranslate"><span class="pre">bf2.triggerManager</span></code>. This object is used to manage “triggers”, which are events that are fired when a PCO enters a defined spherical or hemispherical volume surrounding an object.</p>
 <p>You must <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bf2</span></code> to access the methods and attributes of this object.</p>
 <p>Methods for the singleton object:</p>
@@ -392,16 +391,16 @@
 <p>Returns a tuple containing all objects currently within the specified trigger region.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="bf2-stats-constants">
-<h2><code class="docutils literal notranslate"><span class="pre">bf2.stats.constants</span></code><a class="headerlink" href="#bf2-stats-constants" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="bf2-stats-constants">
+<h2><code class="docutils literal notranslate"><span class="pre">bf2.stats.constants</span></code><a class="headerlink" href="#bf2-stats-constants" title="Permalink to this heading">¶</a></h2>
 <p>This module appears intended to be imported with something like</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bf2.stats.constants</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
 <p>so that everything in it is loaded into the local namespace, rather than being a part of any object. The module includes a lot of constants and dictionaries, as well as some utility functions.</p>
-<div class="section" id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">getVehicleType(templateName)</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">getWeaponType(templateName)</span></code></p></li>
@@ -415,9 +414,9 @@
 </ul>
 <p>For example, <code class="docutils literal notranslate"><span class="pre">getWeaponType(&quot;usrif_m16a2&quot;)</span></code> looks up an M16 rifle in a dictionary called <code class="docutils literal notranslate"><span class="pre">weaponTypeMap</span></code> (also defined in <code class="docutils literal notranslate"><span class="pre">bf2.stats.constants</span></code>) and returns the constant <code class="docutils literal notranslate"><span class="pre">WEAPON_TYPE_ASSAULT</span></code>… which, too, is defined in <code class="docutils literal notranslate"><span class="pre">bf2.stats.constants</span></code>, as having a numeric value of “0”. A list of template names used in some of these functions can be found in the [[Game Engine Object Templates]] page.</p>
 <p>These constant values appear to be the same as those used in the [[BF2Stats|statistics server]], specifically the [[BF2Stats_LookUp_Values|look up values]].</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -436,7 +435,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Technical Information</span></p>
+<p class="caption" role="heading"><span class="caption-text">Technical Information</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../engine/index.html">Battlefield Engine</a></li>
@@ -504,12 +503,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -526,7 +525,7 @@
       &copy;2023, The Project Reality Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
